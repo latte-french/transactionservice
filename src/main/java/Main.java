@@ -19,10 +19,10 @@ public class Main {
     private static void initAllProcesses(){
 
         DatabaseSetup.initDatabase();
-        AccountController accountController = AccountController.getInstance();
-        UserController userController = UserController.getInstance();
-        TransferController transferController = TransferController.getInstance();
-        ExceptionController exceptionController = ExceptionController.getInstance();
+        AccountController.init();
+        UserController.init();
+        TransferController.init();
+        ExceptionController.init();
     }
 
 }

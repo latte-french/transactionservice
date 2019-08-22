@@ -13,17 +13,9 @@ import static spark.Spark.*;
 
 public class AccountController {
 
-    private static AccountController instance;
-    final AccountService accountService = AccountServiceImpl.getInstance();
+    private static AccountService accountService = AccountServiceImpl.getInstance();
 
-    public static AccountController getInstance() {
-        if (instance == null) {
-            instance = new AccountController();
-        }
-        return instance;
-    }
-
-    public AccountController() {
+    public static void init() {
 
         get("/accounts", (req, res) -> {
             return accountService.getAccounts();

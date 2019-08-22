@@ -6,16 +6,7 @@ import static spark.Spark.*;
 
 public class ExceptionController {
 
-    private static ExceptionController instance;
-
-    public static ExceptionController getInstance() {
-        if (instance == null) {
-            instance = new ExceptionController();
-        }
-        return instance;
-    }
-
-    public ExceptionController() {
+    public static void init() {
 
         exception(NoSuchAccountException.class, (exception, request, response) -> {
             response.status(404);

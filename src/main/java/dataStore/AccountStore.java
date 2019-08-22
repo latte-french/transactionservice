@@ -13,10 +13,8 @@ import java.util.List;
 
 public class AccountStore {
 
-    private static AccountStore instance;
     private static Connection connection;
     private static Statement statement;
-    private final EntityConverters entityConverters = EntityConverters.getInstance();
 
     static{
         try{
@@ -28,19 +26,12 @@ public class AccountStore {
         }
     }
 
-    public static AccountStore getInstance() {
-        if (instance == null) {
-            instance = new AccountStore();
-        }
-        return instance;
-    }
-
-    public Account getAccountFromDB(BigInteger id) {
+    public static Account getAccountFromDB(BigInteger id) {
         Account account = new Account();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM accounts WHERE id =" + id);
             connection.commit();
-            if (result.next()) {account = entityConverters.convertFromEntityToAccount(result);}
+            if (result.next()) {account = EntityConverters.convertFromEntityToAccount(result);}
         }
         catch (Exception e) {
             e.printStackTrace(System.out);
@@ -48,13 +39,13 @@ public class AccountStore {
         return account;
     }
 
-    public List<Account> getAccountsFromDB() {
+    public static List<Account> getAccountsFromDB() {
         List<Account> accountCollection = new ArrayList<Account>();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM accounts");
             connection.commit();
             while (result.next()){
-                 accountCollection.add(entityConverters.convertFromEntityToAccount(result));
+                 accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
             }
         }
         catch (Exception e) {
@@ -63,7 +54,7 @@ public class AccountStore {
         return accountCollection;
     }
 
-    public List<Account> getAccountsOfUserFromDB(BigInteger id) {
+    public static List<Account> getAccountsOfUserFromDB(BigInteger id) {
         ResultSet result = null;
         List<Account> accountCollection = new ArrayList<Account>();
         try {
@@ -71,7 +62,7 @@ public class AccountStore {
                     "(SELECT account_id from user_accounts where user_id =" + id + ")");
             connection.commit();
             while (result.next()){
-                accountCollection.add(entityConverters.convertFromEntityToAccount(result));
+                accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
             }
         }
         catch (Exception e) {
@@ -80,7 +71,7 @@ public class AccountStore {
         return accountCollection;
     }
 
-    public void putAccountToDB(Account account){
+    public static void putAccountToDB(Account account){
         try {
             statement.executeUpdate("INSERT INTO accounts VALUES (" + account.getId() +
                     "," + account.getBalance() + ",'" + account.getCurrency() + "')");
@@ -91,7 +82,7 @@ public class AccountStore {
         }
     }
 
-    public void putUserAccountDependencyToDB(BigInteger accountId, BigInteger userId){
+    public static void putUserAccountDependencyToDB(BigInteger accountId, BigInteger userId){
         try {
             statement.executeUpdate("INSERT INTO user_accounts VALUES (null," + userId + "," + accountId + ")");
             connection.commit();
@@ -101,7 +92,7 @@ public class AccountStore {
         }
     }
 
-    public void removeAccountFromDB (BigInteger id){
+    public static void removeAccountFromDB (BigInteger id){
         try {
             statement.executeUpdate("DELETE FROM accounts WHERE id =" + id);
             connection.commit();
@@ -111,7 +102,7 @@ public class AccountStore {
         }
     }
 
-    public void removeUserAccountDependencyFromDB(BigInteger id){
+    public static void removeUserAccountDependencyFromDB(BigInteger id){
         try {
             statement.executeUpdate("DELETE FROM user_accounts WHERE account_id =" + id);
             connection.commit();
@@ -121,7 +112,7 @@ public class AccountStore {
         }
     }
 
-    public void updateAccountInDB(Account account){
+    public static void updateAccountInDB(Account account){
         BigInteger id = account.getId();
         try {
             if (account.getBalance() != null){

@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserStore {
-    private static UserStore instance;
+
     private static Connection connection;
     private static Statement statement;
-    private final EntityConverters entityConverters = EntityConverters.getInstance();
 
     static{
         try{
@@ -26,19 +25,12 @@ public class UserStore {
         }
     }
 
-    public static UserStore getInstance() {
-        if (instance == null) {
-            instance = new UserStore();
-        }
-        return instance;
-    }
-
-    public User getUserFromDB(BigInteger id) {
+    public static User getUserFromDB(BigInteger id) {
         User user = new User();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM users WHERE id =" + id);
             connection.commit();
-            if (result.next()) {user = entityConverters.convertFromEntityToUser(result);}
+            if (result.next()) {user = EntityConverters.convertFromEntityToUser(result);}
         }
         catch (Exception e) {
             e.printStackTrace(System.out);
@@ -46,13 +38,13 @@ public class UserStore {
         return user;
     }
 
-    public List<User> getUsersFromDB() {
+    public static List<User> getUsersFromDB() {
         List<User> userCollection = new ArrayList<User>();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM users");
             connection.commit();
             while (result.next()){
-                userCollection.add(entityConverters.convertFromEntityToUser(result));
+                userCollection.add(EntityConverters.convertFromEntityToUser(result));
             }
         }
         catch (Exception e) {
@@ -61,7 +53,7 @@ public class UserStore {
         return userCollection;
     }
 
-    public void putUserToDB(User user){
+    public static void putUserToDB(User user){
         try {
             statement.executeUpdate("INSERT INTO users VALUES (" + user.getId() +
                     "," + user.getFirstName() + ",'" + user.getLastName() + "')");
@@ -72,7 +64,7 @@ public class UserStore {
         }
     }
 
-    public void removeUserFromDB (BigInteger id){
+    public static void removeUserFromDB (BigInteger id){
         try {
             statement.executeUpdate("DELETE FROM users WHERE id =" + id);
             connection.commit();
@@ -82,7 +74,7 @@ public class UserStore {
         }
     }
 
-    public void removeUsersAccountsFromDB(BigInteger id){
+    public static void removeUsersAccountsFromDB(BigInteger id){
         try {
             statement.executeUpdate("DELETE FROM accounts WHERE id in (SELECT account_id FROM user_accounts WHERE user_id =" + id+ ")");
             connection.commit();
@@ -92,7 +84,7 @@ public class UserStore {
         }
     }
 
-    public void removeUserAccountDependencyFromDB(BigInteger id){
+    public static void removeUserAccountDependencyFromDB(BigInteger id){
         try {
             statement.executeUpdate("DELETE FROM user_accounts WHERE user_id =" + id);
             connection.commit();
@@ -102,7 +94,7 @@ public class UserStore {
         }
     }
 
-    public void updateUserInDB(User user){
+    public static void updateUserInDB(User user){
         BigInteger id = user.getId();
         try {
             if (user.getFirstName() != null){

@@ -6,6 +6,7 @@ public class DatabaseSetup {
 
     private static Connection connection;
     private static Statement statement;
+
     static{
         try{
             connection = DriverManager.getConnection("jdbc:hsqldb:mem:transaction_service", "admin", "");

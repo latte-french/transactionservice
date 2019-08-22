@@ -10,16 +10,8 @@ import java.sql.ResultSet;
 
 public class EntityConverters {
 
-    private static EntityConverters instance;
 
-    public static EntityConverters getInstance() {
-        if (instance == null) {
-            instance = new EntityConverters();
-        }
-        return instance;
-    }
-
-    protected Account convertFromEntityToAccount(ResultSet result){
+    protected static Account convertFromEntityToAccount(ResultSet result){
         Account account = new Account();
         try {
             account.setId(new BigInteger(result.getString("id")));
@@ -32,7 +24,7 @@ public class EntityConverters {
         return account;
     }
 
-    protected User convertFromEntityToUser(ResultSet result){
+    protected static User convertFromEntityToUser(ResultSet result){
         User user = new User();
         try {
             user.setId(new BigInteger(result.getString("id")));
@@ -45,7 +37,7 @@ public class EntityConverters {
         return user;
     }
 
-    protected Transfer convertFromEntityToTransfer(ResultSet result){
+    protected static Transfer convertFromEntityToTransfer(ResultSet result){
         Transfer transfer = new Transfer();
         try {
             transfer.setAccountFromId(new BigInteger(result.getString("account_from")));

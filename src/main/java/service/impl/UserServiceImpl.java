@@ -8,14 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 
+import javax.inject.Singleton;
 import java.math.BigInteger;
 import java.util.List;
 
+@Singleton
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private static UserServiceImpl instance;
-    final UserStore userStore = UserStore.getInstance();
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
         return instance;
     }
     public User getUser(BigInteger id) {
-        User user = userStore.getUserFromDB(id);
+        User user = UserStore.getUserFromDB(id);
         if (user.getId() == null)  {
             LOGGER.error("User with id " + id + " doesn't exist");
             throw new NoSuchUserException(id);
@@ -33,11 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public void createUser(User user) {
-        userStore.putUserToDB(user);
+        UserStore.putUserToDB(user);
     }
 
     public List<User> getUsers() throws NoUsersExistException{
-        List<User> users = userStore.getUsersFromDB();
+        List<User> users = UserStore.getUsersFromDB();
         if (users.size() == 0)  {
             LOGGER.error("No users exist in the database");
             throw new NoUsersExistException();
@@ -47,15 +48,15 @@ public class UserServiceImpl implements UserService {
 
     public void removeUser(BigInteger id) throws NoSuchUserException{
         if (getUser(id) != null) {
-            userStore.removeUserFromDB(id);
-            userStore.removeUsersAccountsFromDB(id);
-            userStore.removeUserAccountDependencyFromDB(id);
+            UserStore.removeUserFromDB(id);
+            UserStore.removeUsersAccountsFromDB(id);
+            UserStore.removeUserAccountDependencyFromDB(id);
         }
     }
 
     public void updateUser(User user) throws NoSuchUserException{
         if (getUser(user.getId()) != null) {
-            userStore.updateUserInDB(user);
+            UserStore.updateUserInDB(user);
         }
     }
 }

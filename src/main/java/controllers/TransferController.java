@@ -13,17 +13,9 @@ import static spark.Spark.*;
 
 public class TransferController {
 
-    private static TransferController instance;
-    final TransferService transferService = TransferServiceImpl.getInstance();
+    private static TransferService transferService = TransferServiceImpl.getInstance();
 
-    public static TransferController getInstance() {
-        if (instance == null) {
-            instance = new TransferController();
-        }
-        return instance;
-    }
-
-    public TransferController(){
+    public static void init(){
 
         post("/transfers", (req, res) -> {
             JsonParser parser = new JsonParser();

@@ -15,11 +15,9 @@ import java.util.List;
 
 public class TransferStore {
 
-    private static TransferStore instance;
     private static Connection connection;
     private static Statement statement;
-    private final AccountService accountService = AccountServiceImpl.getInstance();
-    private final EntityConverters entityConverters = EntityConverters.getInstance();
+    private static AccountService accountService = AccountServiceImpl.getInstance();
 
     static{
         try{
@@ -31,13 +29,7 @@ public class TransferStore {
         }
     }
 
-    public static TransferStore getInstance() {
-        if (instance == null) {
-            instance = new TransferStore();
-        }
-        return instance;
-    }
-    public void putTransferToDB(Transfer transfer) throws NoSuchAccountException {
+    public static void putTransferToDB(Transfer transfer) throws NoSuchAccountException {
         Account accountFrom = accountService.getAccount(transfer.getAccountFromId());
         Account accountTo = accountService.getAccount(transfer.getAccountToId());;
         try {
@@ -52,13 +44,13 @@ public class TransferStore {
         }
     }
 
-    public List<Transfer> getTransfersFromDB(){
+    public static List<Transfer> getTransfersFromDB(){
         List<Transfer> transferCollection = new ArrayList<Transfer>();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM transfers");
             connection.commit();
             while (result.next()){
-                transferCollection.add(entityConverters.convertFromEntityToTransfer(result));
+                transferCollection.add(EntityConverters.convertFromEntityToTransfer(result));
             }
         }
         catch (Exception e) {

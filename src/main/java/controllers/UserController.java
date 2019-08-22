@@ -12,17 +12,9 @@ import static spark.Spark.*;
 
 public class UserController {
 
-    private static UserController instance;
-    private final UserService userService = UserServiceImpl.getInstance();
+    private static UserService userService = UserServiceImpl.getInstance();
 
-    public static UserController getInstance() {
-        if (instance == null) {
-            instance = new UserController();
-        }
-        return instance;
-    }
-
-    public UserController() {
+    public static void init(){
 
          get("/users", (req, res) -> {
             return userService.getUsers();

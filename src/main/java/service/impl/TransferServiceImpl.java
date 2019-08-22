@@ -12,14 +12,14 @@ import service.AccountService;
 import service.TransferService;
 import utils.CurrencyConverter;
 
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class TransferServiceImpl implements TransferService {
 
     private static TransferServiceImpl instance;
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferService.class);
-    final CurrencyConverter currencyConverter = CurrencyConverter.getInstance();
-    final TransferStore transferStore = TransferStore.getInstance();
     final AccountService accountService = AccountServiceImpl.getInstance();
 
     public static TransferService getInstance() {
@@ -40,23 +40,23 @@ public class TransferServiceImpl implements TransferService {
                         accountFrom.getCurrency());
                 throw new BalanceNotEnoughException(accountFrom, sumToTransfer);
             }
-            transfer.setSumTransferred(currencyConverter.currencyConverter(sumToTransfer, accountFrom.getCurrency(),
+            transfer.setSumTransferred(CurrencyConverter.currencyConverter(sumToTransfer, accountFrom.getCurrency(),
                     accountTo.getCurrency()));
 
             accountFrom.setBalance(accountFrom.getBalance() - sumToTransfer);
             accountTo.setBalance(accountTo.getBalance() + transfer.getSumTransferred());
 
-            transferStore.putTransferToDB(transfer);
+            TransferStore.putTransferToDB(transfer);
             accountService.updateAccount(accountFrom);
             accountService.updateAccount(accountTo);
     }
 
     public List<Transfer> getTransfers() throws NoTransfersExistException {
-        List<Transfer> transfers = transferStore.getTransfersFromDB();
+        List<Transfer> transfers = TransferStore.getTransfersFromDB();
         if (transfers.size() == 0){
             LOGGER.error("No transfers exist in the database");
             throw new NoTransfersExistException();
         }
-        return transferStore.getTransfersFromDB();
+        return TransferStore.getTransfersFromDB();
     }
 }
