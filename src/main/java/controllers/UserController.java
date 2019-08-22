@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import model.User;
 import service.UserService;
-import service.impl.UserServiceImpl;
 
 import java.math.BigInteger;
 
@@ -12,7 +11,11 @@ import static spark.Spark.*;
 
 public class UserController {
 
-    private static UserService userService = UserServiceImpl.getInstance();
+    private static UserService userService;
+
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     public static void init(){
 

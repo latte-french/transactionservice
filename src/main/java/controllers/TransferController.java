@@ -4,16 +4,20 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import model.Transfer;
 import service.TransferService;
-import service.impl.TransferServiceImpl;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 public class TransferController {
 
-    private static TransferService transferService = TransferServiceImpl.getInstance();
+    private static TransferService transferService;
+
+    public TransferController(TransferService transferService){
+        this.transferService = transferService;
+    }
 
     public static void init(){
 

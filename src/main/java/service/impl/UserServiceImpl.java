@@ -8,22 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 
-import javax.inject.Singleton;
 import java.math.BigInteger;
 import java.util.List;
 
-@Singleton
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-    private static UserServiceImpl instance;
 
-    public static UserService getInstance() {
-        if (instance == null) {
-            instance = new UserServiceImpl();
-        }
-        return instance;
-    }
     public User getUser(BigInteger id) {
         User user = UserStore.getUserFromDB(id);
         if (user.getId() == null)  {

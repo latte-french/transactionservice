@@ -4,7 +4,6 @@ import model.Account;
 import model.Transfer;
 import model.exceptions.NoSuchAccountException;
 import service.AccountService;
-import service.impl.AccountServiceImpl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +16,11 @@ public class TransferStore {
 
     private static Connection connection;
     private static Statement statement;
-    private static AccountService accountService = AccountServiceImpl.getInstance();
+    private static AccountService accountService;
+
+    public TransferStore (AccountService accountService){
+        this.accountService = accountService;
+    }
 
     static{
         try{

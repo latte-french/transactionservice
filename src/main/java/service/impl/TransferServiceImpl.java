@@ -12,21 +12,15 @@ import service.AccountService;
 import service.TransferService;
 import utils.CurrencyConverter;
 
-import javax.inject.Singleton;
 import java.util.List;
 
-@Singleton
 public class TransferServiceImpl implements TransferService {
 
-    private static TransferServiceImpl instance;
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferService.class);
-    final AccountService accountService = AccountServiceImpl.getInstance();
+    private static AccountService accountService;
 
-    public static TransferService getInstance() {
-        if (instance == null) {
-            instance = new TransferServiceImpl();
-        }
-        return instance;
+    public TransferServiceImpl(AccountService accountService){
+        this.accountService = accountService;
     }
 
     public void createTransfer(Transfer transfer) throws NoSuchAccountException, BalanceNotEnoughException{

@@ -2,6 +2,12 @@ import controllers.*;
 import dataStore.DatabaseSetup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.AccountService;
+import service.TransferService;
+import service.UserService;
+import service.impl.AccountServiceImpl;
+import service.impl.TransferServiceImpl;
+import service.impl.UserServiceImpl;
 
 import static spark.Spark.port;
 
@@ -18,10 +24,14 @@ public class Main {
 
     private static void initAllProcesses(){
 
+        AccountService accountService = new AccountServiceImpl();
+        UserService userService = new UserServiceImpl();
+        TransferService transferService = new TransferServiceImpl(accountService);
+
         DatabaseSetup.initDatabase();
-        AccountController.init();
-        UserController.init();
-        TransferController.init();
+        new AccountController(accountService).init();
+        new UserController(userService).init();
+        new TransferController(transferService).init();
         ExceptionController.init();
     }
 

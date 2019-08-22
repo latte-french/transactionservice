@@ -9,24 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
 
-import javax.inject.Singleton;
 import java.math.BigInteger;
 import java.util.List;
 
-@Singleton
 public class AccountServiceImpl implements AccountService {
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
-    private static AccountServiceImpl instance;
-
-    public static AccountService getInstance() {
-        if (instance == null) {
-            instance = new AccountServiceImpl();
-        }
-        return instance;
-    }
-
 
     public Account getAccount(BigInteger id) throws NoSuchAccountException {
         Account account = AccountStore.getAccountFromDB(id);

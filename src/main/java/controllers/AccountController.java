@@ -4,16 +4,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import model.Account;
 import service.AccountService;
-import service.impl.AccountServiceImpl;
 
 import java.math.BigInteger;
 
 import static spark.Spark.*;
 
-
 public class AccountController {
 
-    private static AccountService accountService = AccountServiceImpl.getInstance();
+    private static AccountService accountService;
+
+    public AccountController(AccountService accountService){
+         this.accountService = accountService;
+     }
 
     public static void init() {
 
@@ -59,4 +61,5 @@ public class AccountController {
         });
 
     }
+
 }
