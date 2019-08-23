@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class EntityConverters {
 
 
-    protected static Account convertFromEntityToAccount(ResultSet result){
+    public static Account convertFromEntityToAccount(ResultSet result){
         Account account = new Account();
         try {
             account.setId(new BigInteger(result.getString("id")));
@@ -24,7 +24,7 @@ public class EntityConverters {
         return account;
     }
 
-    protected static User convertFromEntityToUser(ResultSet result){
+    public static User convertFromEntityToUser(ResultSet result){
         User user = new User();
         try {
             user.setId(new BigInteger(result.getString("id")));
@@ -37,7 +37,7 @@ public class EntityConverters {
         return user;
     }
 
-    protected static Transfer convertFromEntityToTransfer(ResultSet result){
+    public static Transfer convertFromEntityToTransfer(ResultSet result){
         Transfer transfer = new Transfer();
         try {
             transfer.setAccountFromId(new BigInteger(result.getString("account_from")));

@@ -6,19 +6,20 @@ import model.exceptions.NoSuchAccountException;
 import model.exceptions.NoUserAccountsException;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface AccountService {
 
-    Account getAccount(BigInteger id) throws NoSuchAccountException;
+    Account getAccount(BigInteger id) throws NoSuchAccountException, SQLException;
 
-    List<Account> getAccounts() throws NoAccountsExistException;
+    List<Account> getAccounts() throws NoAccountsExistException, SQLException;
 
-    List<Account> getAccountsOfUser(BigInteger userId) throws NoUserAccountsException;
+    List<Account> getAccountsOfUser(BigInteger userId) throws NoUserAccountsException, SQLException;
 
-    void createAccount(Account account, BigInteger userId);
+    void createAccount(Account account, BigInteger userId) throws SQLException;
 
-    void removeAccount(BigInteger id) throws NoSuchAccountException;
+    void removeAccount(BigInteger id) throws NoSuchAccountException, SQLException;
 
-    void updateAccount(Account account) throws NoSuchAccountException;
+    void updateAccount(Account account) throws NoSuchAccountException, SQLException;
 }

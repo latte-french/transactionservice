@@ -1,112 +1,59 @@
 package dataStore;
 
+import dataStore.statementsCreation.UserStatementCreation;
+import model.StatementModel;
 import model.User;
 
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserStore {
 
-    private static Connection connection;
-    private static Statement statement;
+    private static ResultSet result;
+    private static StatementModel statementModel;
+    private static ArrayList<StatementModel> statementModels;
 
-    static{
-        try{
-            connection = DriverManager.getConnection("jdbc:hsqldb:mem:transaction_service", "admin", "");
-            statement = connection.createStatement();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-
-    public static User getUserFromDB(BigInteger id) {
+    public static User getUserFromDB(BigInteger id) throws SQLException {
         User user = new User();
-        try {
-            ResultSet result = statement.executeQuery("SELECT * FROM users WHERE id =" + id);
-            connection.commit();
-            if (result.next()) {user = EntityConverters.convertFromEntityToUser(result);}
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+        statementModel = UserStatementCreation.getUserStatement(id);
+
+        result = StatementExecution.prepareAndExecuteQuery(statementModel);
+        if (result.next()) {user = EntityConverters.convertFromEntityToUser(result);}
+
         return user;
     }
 
-    public static List<User> getUsersFromDB() {
+    public static List<User> getUsersFromDB() throws SQLException{
         List<User> userCollection = new ArrayList<User>();
-        try {
-            ResultSet result = statement.executeQuery("SELECT * FROM users");
-            connection.commit();
-            while (result.next()){
-                userCollection.add(EntityConverters.convertFromEntityToUser(result));
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
+
+        statementModel = UserStatementCreation.getUsersStatement();
+        result = StatementExecution.prepareAndExecuteQuery(statementModel);
+        while (result.next()){
+            userCollection.add(EntityConverters.convertFromEntityToUser(result));
         }
         return userCollection;
     }
 
-    public static void putUserToDB(User user){
-        try {
-            statement.executeUpdate("INSERT INTO users VALUES (" + user.getId() +
-                    "," + user.getFirstName() + ",'" + user.getLastName() + "')");
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+    public static void putUserToDB(User user) throws SQLException{
+        statementModel = UserStatementCreation.putUserStatement(user);
+        StatementExecution.prepareAndExecuteStatement(statementModel);
+
     }
 
-    public static void removeUserFromDB (BigInteger id){
-        try {
-            statement.executeUpdate("DELETE FROM users WHERE id =" + id);
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+    public static void removeUserFromDB (BigInteger id) throws SQLException{
+        statementModels = new ArrayList<>();
+        statementModels.add(UserStatementCreation.removeUserStatement(id));
+        statementModels.add(UserStatementCreation.removeUsersAccountsStatement(id));
+        statementModels.add(UserStatementCreation.removeUserAccountDependencyStatement(id));
+        StatementExecution.prepareAndExecuteStatement(statementModel);
     }
 
-    public static void removeUsersAccountsFromDB(BigInteger id){
-        try {
-            statement.executeUpdate("DELETE FROM accounts WHERE id in (SELECT account_id FROM user_accounts WHERE user_id =" + id+ ")");
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
+    public static void updateUserInDB(User user) throws SQLException{
 
-    public static void removeUserAccountDependencyFromDB(BigInteger id){
-        try {
-            statement.executeUpdate("DELETE FROM user_accounts WHERE user_id =" + id);
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
+        statementModel = UserStatementCreation.updateUserStatement(user);
+        StatementExecution.prepareAndExecuteStatement(statementModel);
 
-    public static void updateUserInDB(User user){
-        BigInteger id = user.getId();
-        try {
-            if (user.getFirstName() != null){
-                statement.executeUpdate("UPDATE users SET first_name = '" + user.getFirstName() +
-                        "' WHERE id =" + id); }
-            if (user.getLastName() != null){
-                statement.executeUpdate("UPDATE users SET last_name = '" + user.getLastName() +
-                        "' WHERE id =" + id); }
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
     }
 }

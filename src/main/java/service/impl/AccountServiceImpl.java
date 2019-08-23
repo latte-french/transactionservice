@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import service.AccountService;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
@@ -17,7 +18,7 @@ public class AccountServiceImpl implements AccountService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
-    public Account getAccount(BigInteger id) throws NoSuchAccountException {
+    public Account getAccount(BigInteger id) throws NoSuchAccountException, SQLException {
         Account account = AccountStore.getAccountFromDB(id);
         if (account.getId() == null)  {
             LOGGER.error("Account with id " + id + " doesn't exist");
@@ -26,12 +27,11 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
-    public void createAccount(Account account, BigInteger userId){
-        AccountStore.putAccountToDB(account);
-        AccountStore.putUserAccountDependencyToDB(account.getId(), userId);
+    public void createAccount(Account account, BigInteger userId) throws SQLException{
+        AccountStore.putAccountToDB(account,userId);
     }
 
-    public List<Account> getAccounts() throws NoAccountsExistException{
+    public List<Account> getAccounts() throws NoAccountsExistException, SQLException{
         List<Account> accounts = AccountStore.getAccountsFromDB();
         if (accounts.size() == 0)  {
             LOGGER.error("No accounts exist in the database");
@@ -40,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
         return accounts;
     }
 
-    public List<Account> getAccountsOfUser (BigInteger id) throws NoUserAccountsException{
+    public List<Account> getAccountsOfUser (BigInteger id) throws NoUserAccountsException, SQLException{
         List<Account> userAccounts = AccountStore.getAccountsOfUserFromDB(id);
         if (userAccounts.size() == 0)  {
             LOGGER.error("No accounts belong to the user with id = " + id);
@@ -49,14 +49,13 @@ public class AccountServiceImpl implements AccountService {
         return userAccounts;
     }
 
-    public void removeAccount(BigInteger id) throws NoSuchAccountException {
+    public void removeAccount(BigInteger id) throws NoSuchAccountException, SQLException {
         if (getAccount(id) != null) {
             AccountStore.removeAccountFromDB(id);
-            AccountStore.removeUserAccountDependencyFromDB(id);
         }
     }
 
-    public void updateAccount(Account account) throws NoSuchAccountException{
+    public void updateAccount(Account account) throws NoSuchAccountException, SQLException{
         if (getAccount(account.getId()) != null) {
             AccountStore.updateAccountInDB(account);
         }

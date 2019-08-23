@@ -1,131 +1,72 @@
 package dataStore;
 
+import dataStore.statementsCreation.AccountStatementCreation;
+import model.StatementModel;
 import model.Account;
 
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AccountStore {
 
-    private static Connection connection;
-    private static Statement statement;
+    private static ResultSet result;
+    private static StatementModel statementModel;
+    private static ArrayList<StatementModel> statementModels;
 
-    static{
-        try{
-            connection = DriverManager.getConnection("jdbc:hsqldb:mem:transaction_service", "admin", "");
-            statement = connection.createStatement();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-
-    public static Account getAccountFromDB(BigInteger id) {
+    public static Account getAccountFromDB(BigInteger id) throws SQLException {
         Account account = new Account();
-        try {
-            ResultSet result = statement.executeQuery("SELECT * FROM accounts WHERE id =" + id);
-            connection.commit();
-            if (result.next()) {account = EntityConverters.convertFromEntityToAccount(result);}
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+        statementModel = AccountStatementCreation.getAccountStatement(id);
+
+        result = StatementExecution.prepareAndExecuteQuery(statementModel);
+        if (result.next()) {account = EntityConverters.convertFromEntityToAccount(result);}
         return account;
     }
 
-    public static List<Account> getAccountsFromDB() {
+    public static List<Account> getAccountsFromDB () throws SQLException{
         List<Account> accountCollection = new ArrayList<Account>();
-        try {
-            ResultSet result = statement.executeQuery("SELECT * FROM accounts");
-            connection.commit();
-            while (result.next()){
+        statementModel = AccountStatementCreation.getAccountsStatement();
+
+        result = StatementExecution.prepareAndExecuteQuery(statementModel);
+        while (result.next()){
                  accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
         }
         return accountCollection;
     }
 
-    public static List<Account> getAccountsOfUserFromDB(BigInteger id) {
-        ResultSet result = null;
+    public static List<Account> getAccountsOfUserFromDB(BigInteger id) throws SQLException{
         List<Account> accountCollection = new ArrayList<Account>();
-        try {
-            result = statement.executeQuery("SELECT * FROM accounts WHERE id IN "+
-                    "(SELECT account_id from user_accounts where user_id =" + id + ")");
-            connection.commit();
-            while (result.next()){
+        statementModel = AccountStatementCreation.getAccountsOfUserStatement(id);
+
+        result = StatementExecution.prepareAndExecuteQuery(statementModel);
+        while (result.next()){
                 accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
         }
         return accountCollection;
     }
 
-    public static void putAccountToDB(Account account){
-        try {
-            statement.executeUpdate("INSERT INTO accounts VALUES (" + account.getId() +
-                    "," + account.getBalance() + ",'" + account.getCurrency() + "')");
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+    public static void putAccountToDB(Account account, BigInteger userId) throws SQLException{
+        statementModels = new ArrayList<>();
+
+        statementModels.add(AccountStatementCreation.putAccountStatement(account));
+        statementModels.add(AccountStatementCreation.putUserAccountDependencyStatement(account.getId(), userId));
+
+        StatementExecution.prepareAndExecuteStatement(statementModels);
     }
 
-    public static void putUserAccountDependencyToDB(BigInteger accountId, BigInteger userId){
-        try {
-            statement.executeUpdate("INSERT INTO user_accounts VALUES (null," + userId + "," + accountId + ")");
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+    public static void removeAccountFromDB (BigInteger id) throws SQLException{
+        statementModels = new ArrayList<>();
+        statementModels.add(AccountStatementCreation.removeAccountStatement(id));
+        statementModels.add(AccountStatementCreation.removeUserAccountDependencyStatement(id));
+
+        StatementExecution.prepareAndExecuteStatement(statementModels);
     }
 
-    public static void removeAccountFromDB (BigInteger id){
-        try {
-            statement.executeUpdate("DELETE FROM accounts WHERE id =" + id);
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-
-    public static void removeUserAccountDependencyFromDB(BigInteger id){
-        try {
-            statement.executeUpdate("DELETE FROM user_accounts WHERE account_id =" + id);
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-
-    public static void updateAccountInDB(Account account){
-        BigInteger id = account.getId();
-        try {
-            if (account.getBalance() != null){
-                statement.executeUpdate("UPDATE accounts SET balance = " + account.getBalance() +
-                                "WHERE id =" + id); }
-            if (account.getCurrency() != null){
-                statement.executeUpdate("UPDATE accounts SET currency = '" + account.getCurrency() +
-                        "' WHERE id =" + id); }
-            connection.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+    public static void updateAccountInDB(Account account) throws SQLException{
+        statementModel = AccountStatementCreation.updateAccountStatement(account);
+        StatementExecution.prepareAndExecuteStatement(statementModel);
     }
 
 }

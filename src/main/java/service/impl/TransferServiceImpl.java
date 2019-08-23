@@ -12,6 +12,7 @@ import service.AccountService;
 import service.TransferService;
 import utils.CurrencyConverter;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class TransferServiceImpl implements TransferService {
@@ -23,7 +24,7 @@ public class TransferServiceImpl implements TransferService {
         this.accountService = accountService;
     }
 
-    public void createTransfer(Transfer transfer) throws NoSuchAccountException, BalanceNotEnoughException{
+    public void createTransfer(Transfer transfer) throws NoSuchAccountException, BalanceNotEnoughException, SQLException {
             Account accountFrom = accountService.getAccount(transfer.getAccountFromId());
             Account accountTo = accountService.getAccount(transfer.getAccountToId());
             Double sumToTransfer = transfer.getSumToTransfer();
@@ -41,11 +42,9 @@ public class TransferServiceImpl implements TransferService {
             accountTo.setBalance(accountTo.getBalance() + transfer.getSumTransferred());
 
             TransferStore.putTransferToDB(transfer);
-            accountService.updateAccount(accountFrom);
-            accountService.updateAccount(accountTo);
     }
 
-    public List<Transfer> getTransfers() throws NoTransfersExistException {
+    public List<Transfer> getTransfers() throws NoTransfersExistException, SQLException {
         List<Transfer> transfers = TransferStore.getTransfersFromDB();
         if (transfers.size() == 0){
             LOGGER.error("No transfers exist in the database");
