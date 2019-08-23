@@ -12,7 +12,6 @@ public class StatementExecution {
 
     private static Connection connection;
     private static PreparedStatement statement;
-    private static Savepoint transactionSavepoint;
     private static String statementMessage;
     private static ArrayList<String> statementObjects;
     private static ArrayList<PreparedStatement> statements;
@@ -24,7 +23,7 @@ public class StatementExecution {
             connection = DriverManager.getConnection("jdbc:hsqldb:mem:transaction_service", "admin", "");
         }
         catch (Exception e) {
-            e.printStackTrace(System.out);
+            LOGGER.error("Couldn't create connection to the database");
         }
     }
 

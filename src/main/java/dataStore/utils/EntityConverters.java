@@ -3,12 +3,16 @@ package dataStore.utils;
 import model.Account;
 import model.Transfer;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
 
 
 public class EntityConverters {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityConverters.class);
 
 
     public static Account convertFromEntityToAccount(ResultSet result){
@@ -19,7 +23,7 @@ public class EntityConverters {
             account.setCurrency(result.getString("currency"));
         }
         catch (Exception e) {
-            e.printStackTrace(System.out);
+            LOGGER.error("Couldn't convert entity to account");
         }
         return account;
     }
@@ -32,7 +36,7 @@ public class EntityConverters {
             user.setLastName(result.getString("last_name"));
         }
         catch (Exception e) {
-            e.printStackTrace(System.out);
+            LOGGER.error("Couldn't convert entity to user");
         }
         return user;
     }
@@ -47,7 +51,7 @@ public class EntityConverters {
             transfer.setTransferredAt(result.getTimestamp("transferred_at"));
         }
         catch (Exception e) {
-            e.printStackTrace(System.out);
+            LOGGER.error("Couldn't convert entity to transfer");
         }
         return transfer;
     }

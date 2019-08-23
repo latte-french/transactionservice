@@ -19,7 +19,7 @@ public class DatabaseCreation {
             //Registering the HSQLDB JDBC driver
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+            LOGGER.error("Couldn't register the JDBCDriver");
         }
         //Creating the connection with HSQLDB
 
