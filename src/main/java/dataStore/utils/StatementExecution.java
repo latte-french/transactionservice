@@ -1,4 +1,4 @@
-package dataStore;
+package dataStore.utils;
 
 import model.StatementModel;
 import org.slf4j.Logger;

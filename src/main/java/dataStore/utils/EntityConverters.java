@@ -1,4 +1,4 @@
-package dataStore;
+package dataStore.utils;
 
 import model.Account;
 import model.Transfer;
