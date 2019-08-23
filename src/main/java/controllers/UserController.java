@@ -1,7 +1,6 @@
 package controllers;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import controllers.utils.RequestConverters;
 import model.User;
 import service.UserService;
 
@@ -28,30 +27,28 @@ public class UserController {
             return userService.getUser(id);
         });
 
+        get("users/:id/accounts", (req, res) -> {
+            BigInteger id = new BigInteger(req.params("id"));
+            return userService.getAccountsOfUser(id);
+        });
+
+
         post("/users", (req, res) -> {
-            JsonParser parser = new JsonParser();
-            JsonObject obj = parser.parse(req.body()).getAsJsonObject();
-            User.counter.add(BigInteger.ONE);
-            User user = new User(User.counter, obj.get("firstName").getAsString(), obj.get("lastName").getAsString());
+            User user = RequestConverters.getUserFromPostUserRequest(req);
             userService.createUser(user);
-            return user;
+            return "OK";
         });
 
         put("/users/:id", (req, res) -> {
-            JsonParser parser = new JsonParser();
-            JsonObject obj = parser.parse(req.body()).getAsJsonObject();
-            User user = new User();
-            if (obj.get("firstName") != null) {user.setFirstName(obj.get("firstName").getAsString());}
-            if (obj.get("lastName") != null) {user.setLastName(obj.get("lastName").getAsString());}
-            user.setId(new BigInteger(req.params("id")));
+            User user = RequestConverters.getUserFromPutUserRequest(req);
             userService.updateUser(user);
-            return res;
+            return "OK";
         });
 
         delete("/users/:id", (req, res) -> {
             BigInteger id = new BigInteger(req.params("id"));
             userService.removeUser(id);
-            return res;
+            return "OK";
         });
 
     }

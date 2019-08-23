@@ -21,7 +21,7 @@ public class UserStatementCreation {
 
     public static StatementModel getUsersStatement() {
         statementMessage = "SELECT * FROM users";
-        return new StatementModel(statementMessage, statementObjects);
+        return new StatementModel(statementMessage);
     }
 
     public static StatementModel putUserStatement(User user){

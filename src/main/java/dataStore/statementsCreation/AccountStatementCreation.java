@@ -66,17 +66,21 @@ public class AccountStatementCreation {
     }
 
     public static StatementModel updateAccountStatement(Account account){
+        return updateAccountStatement(account, account);
+    }
+
+    public static StatementModel updateAccountStatement(Account account, Account accountChanges){
 
        statementObjects = new ArrayList<>();
 
-        if (account.getBalance() != null){
+        if (accountChanges.getBalance() != null){
             statementMessage = "UPDATE accounts SET balance = ? WHERE id = ?";
-            statementObjects.add(account.getBalance().toString());
+            statementObjects.add(accountChanges.getBalance().toString());
             statementObjects.add(account.getId().toString());
         }
-        if (account.getCurrency() != null){
+        if (accountChanges.getCurrency() != null){
             statementMessage = "UPDATE accounts SET currency = ? WHERE id = ?";
-            statementObjects.add(account.getCurrency());
+            statementObjects.add(accountChanges.getCurrency());
             statementObjects.add(account.getId().toString());
         }
 

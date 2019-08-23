@@ -4,7 +4,6 @@ import dataStore.AccountStore;
 import model.Account;
 import model.exceptions.NoAccountsExistException;
 import model.exceptions.NoSuchAccountException;
-import model.exceptions.NoUserAccountsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
@@ -40,24 +39,15 @@ public class AccountServiceImpl implements AccountService {
         return accounts;
     }
 
-    public List<Account> getAccountsOfUser (BigInteger id) throws NoUserAccountsException, SQLException{
-        List<Account> userAccounts = AccountStore.getAccountsOfUserFromDB(id);
-        if (userAccounts.size() == 0)  {
-            LOGGER.error("No accounts belong to the user with id = " + id);
-            throw new NoUserAccountsException(id);
-        }
-        return userAccounts;
-    }
-
     public void removeAccount(BigInteger id) throws NoSuchAccountException, SQLException {
         if (getAccount(id) != null) {
             AccountStore.removeAccountFromDB(id);
         }
     }
 
-    public void updateAccount(Account account) throws NoSuchAccountException, SQLException{
+    public void updateAccount(Account account, Account accountChanges) throws NoSuchAccountException, SQLException{
         if (getAccount(account.getId()) != null) {
-            AccountStore.updateAccountInDB(account);
+            AccountStore.updateAccountInDB(account, accountChanges);
         }
     }
 

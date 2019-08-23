@@ -8,6 +8,8 @@ import static spark.Spark.*;
 
 public class ExceptionController {
 
+    public ExceptionController(){}
+
     public static void init() {
 
         exception(NoSuchAccountException.class, (exception, request, response) -> {

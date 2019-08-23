@@ -1,7 +1,9 @@
 package service;
 
+import model.Account;
 import model.User;
 import model.exceptions.NoSuchUserException;
+import model.exceptions.NoUserAccountsException;
 import model.exceptions.NoUsersExistException;
 
 import java.math.BigInteger;
@@ -12,6 +14,8 @@ public interface UserService {
     User getUser(BigInteger id) throws NoSuchUserException, SQLException;
 
     List<User> getUsers() throws NoUsersExistException, SQLException;
+
+    List<Account> getAccountsOfUser(BigInteger userId) throws NoUserAccountsException, SQLException;
 
     void createUser(User user) throws SQLException;
 

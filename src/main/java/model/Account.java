@@ -11,8 +11,13 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Data public class Account {
 
-    public static BigInteger counter = new BigInteger("4000123412341237");
     private BigInteger id;
     private Double balance;
     private String currency;
+    public static volatile BigInteger counter = new BigInteger("4000123412341236");
+
+    public static void increaseCounter(){
+        counter = counter.add(BigInteger.ONE);
+    }
 }
+

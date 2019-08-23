@@ -1,5 +1,6 @@
 import controllers.*;
 import dataStore.DatabaseCreation;
+import dataStore.DatabaseInitialization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AccountService;
@@ -29,10 +30,11 @@ public class Main {
         TransferService transferService = new TransferServiceImpl(accountService);
 
         DatabaseCreation.initDatabase();
+        DatabaseInitialization.populateDatabase();
         new AccountController(accountService).init();
         new UserController(userService).init();
         new TransferController(transferService).init();
-        ExceptionController.init();
+        new ExceptionController().init();
     }
 
 }

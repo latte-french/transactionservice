@@ -1,12 +1,8 @@
 package controllers;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import controllers.utils.RequestConverters;
 import model.Transfer;
 import service.TransferService;
-
-import java.sql.Timestamp;
-import java.util.Date;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -22,15 +18,9 @@ public class TransferController {
     public static void init(){
 
         post("/transfers", (req, res) -> {
-            JsonParser parser = new JsonParser();
-            JsonObject obj = parser.parse(req.body()).getAsJsonObject();
-            Transfer transfer = new Transfer();
-            transfer.setAccountFromId(obj.get("from").getAsBigInteger());
-            transfer.setAccountToId(obj.get("to").getAsBigInteger());
-            transfer.setSumToTransfer(obj.get("money").getAsDouble());
-            transfer.setTransferredAt(new Timestamp(new Date().getTime()));
+            Transfer transfer = RequestConverters.getTransferFromPostTransferRequest(req);
             transferService.createTransfer(transfer);
-            return ("OK");
+            return ("Transfer made: " + transfer.toString());
         });
 
         get("/transfers", (req, res) -> {

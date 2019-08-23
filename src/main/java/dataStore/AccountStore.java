@@ -66,8 +66,8 @@ public class AccountStore {
         StatementExecution.prepareAndExecuteStatements(statementModels);
     }
 
-    public static void updateAccountInDB(Account account) throws SQLException{
-        statementModel = AccountStatementCreation.updateAccountStatement(account);
+    public static void updateAccountInDB(Account account, Account accountChanges) throws SQLException{
+        statementModel = AccountStatementCreation.updateAccountStatement(account, accountChanges);
         StatementExecution.prepareAndExecuteStatement(statementModel);
     }
 
