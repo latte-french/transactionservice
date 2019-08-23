@@ -53,7 +53,7 @@ public class AccountStore {
         statementModels.add(AccountStatementCreation.putAccountStatement(account));
         statementModels.add(AccountStatementCreation.putUserAccountDependencyStatement(account.getId(), userId));
 
-        StatementExecution.prepareAndExecuteStatement(statementModels);
+        StatementExecution.prepareAndExecuteStatements(statementModels);
     }
 
     public static void removeAccountFromDB (BigInteger id) throws SQLException{
@@ -61,7 +61,7 @@ public class AccountStore {
         statementModels.add(AccountStatementCreation.removeAccountStatement(id));
         statementModels.add(AccountStatementCreation.removeUserAccountDependencyStatement(id));
 
-        StatementExecution.prepareAndExecuteStatement(statementModels);
+        StatementExecution.prepareAndExecuteStatements(statementModels);
     }
 
     public static void updateAccountInDB(Account account) throws SQLException{

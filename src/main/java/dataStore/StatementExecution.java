@@ -38,7 +38,7 @@ public class StatementExecution {
         statementExecution(statement);
     }
 
-    public static void prepareAndExecuteStatement (ArrayList<StatementModel> statementModels) throws SQLException {
+    public static void prepareAndExecuteStatements (ArrayList<StatementModel> statementModels) throws SQLException {
         statements = new ArrayList<>();
         Iterator<StatementModel> statementModelsIterator = statementModels.iterator();
 

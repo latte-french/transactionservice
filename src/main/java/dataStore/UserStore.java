@@ -47,7 +47,7 @@ public class UserStore {
         statementModels.add(UserStatementCreation.removeUserStatement(id));
         statementModels.add(UserStatementCreation.removeUsersAccountsStatement(id));
         statementModels.add(UserStatementCreation.removeUserAccountDependencyStatement(id));
-        StatementExecution.prepareAndExecuteStatement(statementModel);
+        StatementExecution.prepareAndExecuteStatements(statementModels);
     }
 
     public static void updateUserInDB(User user) throws SQLException{

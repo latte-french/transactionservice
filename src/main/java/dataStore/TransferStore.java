@@ -34,7 +34,7 @@ public class TransferStore {
         statementModels.add(AccountStatementCreation.updateAccountStatement(accountFrom));
         statementModels.add(AccountStatementCreation.updateAccountStatement(accountTo));
 
-        StatementExecution.prepareAndExecuteStatement(statementModels);
+        StatementExecution.prepareAndExecuteStatements(statementModels);
     }
 
     public static List<Transfer> getTransfersFromDB() throws SQLException{
