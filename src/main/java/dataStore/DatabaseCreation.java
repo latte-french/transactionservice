@@ -15,14 +15,6 @@ public class DatabaseCreation {
 
     public static void initDatabase(){
 
-        try {
-            //Registering the HSQLDB JDBC driver
-            Class.forName("org.hsqldb.jdbc.JDBCDriver");
-        } catch (Exception e) {
-            LOGGER.error("Couldn't register the JDBCDriver");
-        }
-        //Creating the connection with HSQLDB
-
         createUserTable();
         createAccountTable();
         createUserAccountTable();

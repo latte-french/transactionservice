@@ -8,7 +8,6 @@ import dataStore.DatabaseCreation;
 import model.Account;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import service.impl.AccountServiceImpl;
 import spark.servlet.SparkApplication;
@@ -31,8 +30,8 @@ public class AccountControllerTest {
     }
 
     @ClassRule
-    public static SparkServer<AccountControllerTestSparkApplication> testServer =
-            new SparkServer<>(AccountControllerTestSparkApplication.class, 9999);
+    public static SparkServer<AccountControllerTestSparkApplication> testServerAccounts =
+            new SparkServer<>(AccountControllerTestSparkApplication.class, 9997);
 
 
     @Before
@@ -41,85 +40,81 @@ public class AccountControllerTest {
         ModelsInitialization.init();
     }
 
-    @Ignore
     @Test
     /*positive test*/
     public void GetAccount() throws HttpClientException {
         Account account = ModelsInitialization.accountForTest;
 
-        GetMethod get = testServer.get("/accounts/4000123412341234", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerAccounts.get("/accounts/4000123412341234", false);
+        HttpResponse httpResponse = testServerAccounts.execute(get);
 
         assertEquals(200, httpResponse.code());
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
-    @Test
+    
+     @Test
     /*positive test*/
     public void GetAccounts() throws HttpClientException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
 
-        GetMethod get = testServer.get("/accounts", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerAccounts.get("/accounts", false);
+        HttpResponse httpResponse = testServerAccounts.execute(get);
 
         assertEquals(200, httpResponse.code());
         assertEquals(accounts.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*positive test*/
     public void PostAccount() throws HttpClientException {
         String jsonString = "{'balance':'5','currency':'RUB','userId':'2'}";
         Account account = new Account(new BigInteger("4000123412341237"),5.0,"RUB");
 
-        PostMethod post = testServer.post("/accounts", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(post);
+        PostMethod post = testServerAccounts.post("/accounts", jsonString, false);
+        HttpResponse httpResponse = testServerAccounts.execute(post);
 
         assertEquals(200, httpResponse.code());
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
     @Test
     /*positive test*/
     public void PutAccountChangeBalance() throws HttpClientException {
         Account account = ModelsInitialization.accountForTest;
         String jsonString = "{'balance':'5'}";
 
-        PutMethod put = testServer.put("/accounts/4000123412341234", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
+        HttpResponse httpResponse = testServerAccounts.execute(put);
 
         account.setBalance(5.0);
         assertEquals(200, httpResponse.code());
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
-    @Test
+     @Test
     /*positive test*/
     public void PutAccountChangeCurrency() throws HttpClientException {
         Account account = ModelsInitialization.accountForTest;
         String jsonString = "{'currency':'EUR'}";
 
-        PutMethod put = testServer.put("/accounts/4000123412341234", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
+        HttpResponse httpResponse = testServerAccounts.execute(put);
 
         account.setCurrency("EUR");
         assertEquals(200, httpResponse.code());
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
     @Test
     /*positive test*/
     public void PutAccountChangeBalanceAndCurrency() throws HttpClientException {
         Account account = ModelsInitialization.accountForTest;
         String jsonString = "{'balance':'5','currency':'EUR'}";
 
-        PutMethod put = testServer.put("/accounts/4000123412341234", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
+        HttpResponse httpResponse = testServerAccounts.execute(put);
 
         account.setBalance(5.0);
         account.setCurrency("EUR");
@@ -128,77 +123,77 @@ public class AccountControllerTest {
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*positive test*/
     public void DeleteAccount() throws HttpClientException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
         accounts.remove(0);
 
-        DeleteMethod delete = testServer.delete("/accounts/4000123412341234", false);
-        HttpResponse httpResponse = testServer.execute(delete);
+        DeleteMethod delete = testServerAccounts.delete("/accounts/4000123412341234", false);
+        HttpResponse httpResponse = testServerAccounts.execute(delete);
 
         assertEquals(200, httpResponse.code());
 
-        GetMethod get = testServer.get("/accounts", false);
-        httpResponse = testServer.execute(get);
+        GetMethod get = testServerAccounts.get("/accounts", false);
+        httpResponse = testServerAccounts.execute(get);
 
         assertEquals(accounts.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing account*/
     public void GetNonExistingAccount() throws HttpClientException {
-        GetMethod get = testServer.get("/accounts/1", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerAccounts.get("/accounts/1", false);
+        HttpResponse httpResponse = testServerAccounts.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("Account with id 1 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void GetAccountEmptyDatabase() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        GetMethod get = testServer.get("/accounts/4000123412341234", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerAccounts.get("/accounts/4000123412341234", false);
+        HttpResponse httpResponse = testServerAccounts.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No accounts exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty accounts table*/
     public void GetAccountsEmpty() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        GetMethod get = testServer.get("/accounts", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerAccounts.get("/accounts", false);
+        HttpResponse httpResponse = testServerAccounts.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No accounts exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing account*/
     public void PutNonExistingAccount() throws HttpClientException {
         String jsonString = "{'currency':'EUR'}";
 
-        PutMethod put = testServer.put("/accounts/1", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerAccounts.put("/accounts/1", jsonString, false);
+        HttpResponse httpResponse = testServerAccounts.execute(put);
 
         assertEquals(404, httpResponse.code());
         assertEquals("Account with id 1 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void PutAccountEmptyDatabase() throws HttpClientException {
@@ -206,36 +201,36 @@ public class AccountControllerTest {
         DatabaseCreation.initDatabase();
         String jsonString = "{'currency':'EUR'}";
 
-        PutMethod put = testServer.put("/accounts/4000123412341234", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
+        HttpResponse httpResponse = testServerAccounts.execute(put);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No accounts exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing account*/
     public void DeleteNonExistingAccount() throws HttpClientException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
         accounts.remove(0);
 
-        DeleteMethod delete = testServer.delete("/accounts/1", false);
-        HttpResponse httpResponse = testServer.execute(delete);
+        DeleteMethod delete = testServerAccounts.delete("/accounts/1", false);
+        HttpResponse httpResponse = testServerAccounts.execute(delete);
 
         assertEquals(404, httpResponse.code());
         assertEquals("Account with id 1 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void DeleteAccountEmpty() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        DeleteMethod delete = testServer.delete("/accounts/4000123412341234", false);
-        HttpResponse httpResponse = testServer.execute(delete);
+        DeleteMethod delete = testServerAccounts.delete("/accounts/4000123412341234", false);
+        HttpResponse httpResponse = testServerAccounts.execute(delete);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No accounts exist in the database", new String(httpResponse.body()));

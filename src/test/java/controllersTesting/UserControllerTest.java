@@ -9,7 +9,6 @@ import model.Account;
 import model.User;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import service.impl.UserServiceImpl;
 import spark.servlet.SparkApplication;
@@ -32,7 +31,7 @@ public class UserControllerTest {
     }
 
     @ClassRule
-    public static SparkServer<UserControllerTestSparkApplication> testServer =
+    public static SparkServer<UserControllerTestSparkApplication> testServerUsers =
             new SparkServer<>(UserControllerTestSparkApplication.class, 9999);
 
 
@@ -42,98 +41,94 @@ public class UserControllerTest {
         ModelsInitialization.init();
     }
 
-    @Ignore
+    
     @Test
     /*positive test*/
     public void GetUser() throws HttpClientException {
         User user = ModelsInitialization.userForTest;
 
-        GetMethod get = testServer.get("/users/1", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/1", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(200, httpResponse.code());
         assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*positive test*/
     public void GetUsers() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
 
-        GetMethod get = testServer.get("/users", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(200, httpResponse.code());
         assertEquals(users.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*positive test*/
     public void GetUserAccounts() throws HttpClientException {
         ArrayList<Account> userAccounts = ModelsInitialization.userAccountsForTest;
 
-        GetMethod get = testServer.get("/users/2/accounts", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/2/accounts", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(200, httpResponse.code());
         assertEquals(userAccounts.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
     @Test
     /*positive test*/
     public void PostUser() throws HttpClientException {
         String jsonString = "{'firstName':'Maria','lastName':'Teresa'}";
         User user = new User(new BigInteger("4"),"Maria","Teresa");
 
-        PostMethod post = testServer.post("/users", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(post);
+        PostMethod post = testServerUsers.post("/users", jsonString, false);
+        HttpResponse httpResponse = testServerUsers.execute(post);
 
         assertEquals(200, httpResponse.code());
         assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
     @Test
     /*positive test*/
     public void PutUserChangeFirstName() throws HttpClientException {
         User user = ModelsInitialization.userForTest;
         String jsonString = "{'firstName':'Angela'}";
 
-        PutMethod put = testServer.put("/users/1", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerUsers.put("/users/1", jsonString, false);
+        HttpResponse httpResponse = testServerUsers.execute(put);
 
         user.setFirstName("Angela");
         assertEquals(200, httpResponse.code());
         assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
-    @Test
+     @Test
     /*positive test*/
     public void PutUserChangeLastName() throws HttpClientException {
         User user = ModelsInitialization.userForTest;
         String jsonString = "{'lastName':'Wolf'}";
 
-        PutMethod put = testServer.put("/users/1", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerUsers.put("/users/1", jsonString, false);
+        HttpResponse httpResponse = testServerUsers.execute(put);
 
         user.setLastName("Wolf");
         assertEquals(200, httpResponse.code());
         assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
     @Test
     /*positive test*/
     public void PutUserChangeFirstAndLastNames() throws HttpClientException {
         User user = ModelsInitialization.userForTest;
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
-        PutMethod put = testServer.put("/users/1", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerUsers.put("/users/1", jsonString, false);
+        HttpResponse httpResponse = testServerUsers.execute(put);
 
         user.setFirstName("Angela");
         user.setLastName("Wolf");
@@ -141,116 +136,116 @@ public class UserControllerTest {
         assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*positive test*/
     public void DeleteUser() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
         users.remove(0);
 
-        DeleteMethod delete = testServer.delete("/users/1", false);
-        HttpResponse httpResponse = testServer.execute(delete);
+        DeleteMethod delete = testServerUsers.delete("/users/1", false);
+        HttpResponse httpResponse = testServerUsers.execute(delete);
 
         assertEquals(200, httpResponse.code());
 
-        GetMethod get = testServer.get("/users", false);
-        httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users", false);
+        httpResponse = testServerUsers.execute(get);
 
         assertEquals(users.toString(), new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing user*/
     public void GetNonExistingUser() throws HttpClientException {
 
-        GetMethod get = testServer.get("/users/7", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/7", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("User with id 7 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
-    @Test
+    
+     @Test
     /*negative test on non-existing user*/
     public void GetUserEmptyDatabase() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        GetMethod get = testServer.get("/users/2", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/2", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void GetUsersEmptyDatabase() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        GetMethod get = testServer.get("/users", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing user*/
     public void GetAccountsNonExistingUser() throws HttpClientException {
 
-        GetMethod get = testServer.get("/users/7/accounts", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/7/accounts", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("User with id 7 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void GetUserAccountsEmptyDatabase() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        GetMethod get = testServer.get("/users/7/accounts", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/7/accounts", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test when no accounts exist for this user*/
     public void GetNoAccountsBelongToUser() throws HttpClientException {
 
-        GetMethod get = testServer.get("/users/3/accounts", false);
-        HttpResponse httpResponse = testServer.execute(get);
+        GetMethod get = testServerUsers.get("/users/3/accounts", false);
+        HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No accounts belong to the user with id = 3", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing user*/
     public void PutNonExistingUser() throws HttpClientException {
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
-        PutMethod put = testServer.put("/users/4", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerUsers.put("/users/4", jsonString, false);
+        HttpResponse httpResponse = testServerUsers.execute(put);
 
         assertEquals(404, httpResponse.code());
         assertEquals("User with id 4 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void PutUserEmptyDatabase() throws HttpClientException {
@@ -259,36 +254,36 @@ public class UserControllerTest {
 
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
-        PutMethod put = testServer.put("/users/4", jsonString, false);
-        HttpResponse httpResponse = testServer.execute(put);
+        PutMethod put = testServerUsers.put("/users/4", jsonString, false);
+        HttpResponse httpResponse = testServerUsers.execute(put);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on non-existing user*/
     public void DeleteNonExistingUser() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
         users.remove(0);
 
-        DeleteMethod delete = testServer.delete("/users/4", false);
-        HttpResponse httpResponse = testServer.execute(delete);
+        DeleteMethod delete = testServerUsers.delete("/users/4", false);
+        HttpResponse httpResponse = testServerUsers.execute(delete);
 
         assertEquals(404, httpResponse.code());
         assertEquals("User with id 4 doesn't exist", new String(httpResponse.body()));
     }
 
-    @Ignore
+    
     @Test
     /*negative test on empty database*/
     public void DeleteUserEmpty() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        DeleteMethod delete = testServer.delete("/users/1", false);
-        HttpResponse httpResponse = testServer.execute(delete);
+        DeleteMethod delete = testServerUsers.delete("/users/1", false);
+        HttpResponse httpResponse = testServerUsers.execute(delete);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No users exist in the database", new String(httpResponse.body()));

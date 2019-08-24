@@ -1,31 +1,24 @@
 package dataStore.utils;
 
+import dataStore.ConnectionPool;
 import model.StatementModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class StatementExecution {
 
-    private static Connection connection;
     private static PreparedStatement statement;
     private static String statementMessage;
     private static ArrayList<String> statementObjects;
     private static ArrayList<PreparedStatement> statements;
     private static ResultSet result;
+    private static ConnectionPool connectionPool = new ConnectionPool();
     private static final Logger LOGGER = LoggerFactory.getLogger(StatementExecution.class);
-
-    static{
-        try{
-            connection = DriverManager.getConnection("jdbc:hsqldb:mem:transaction_service", "admin", "");
-        }
-        catch (Exception e) {
-            LOGGER.error("Couldn't create connection to the database");
-        }
-    }
 
     public static ResultSet prepareAndExecuteQuery (StatementModel statementModel) throws SQLException {
        statement = prepareStatementForExecution(statementModel);
@@ -51,8 +44,9 @@ public class StatementExecution {
     public static PreparedStatement prepareStatementForExecution (StatementModel statementModel) throws SQLException {
         statementMessage = statementModel.getStatementMessage();
         statementObjects = statementModel.getStatementObjects();
+        statement = getConnectionFromPool().prepareStatement(statementMessage);
+        //connectionPool.printDbStatus();
 
-        statement = connection.prepareStatement(statementMessage);
         Iterator<String> statementObjectsIterator = statementObjects.iterator();
 
         while (statementObjectsIterator.hasNext()) {
@@ -64,8 +58,11 @@ public class StatementExecution {
     }
 
     public static void statementExecution (PreparedStatement statement) throws SQLException {
+
         statement.executeUpdate();
+        Connection connection = getConnectionFromPool();
         connection.commit();
+        closeConnectionInPool(connection);
     }
 
     public static void statementsExecution (ArrayList<PreparedStatement> statements) throws SQLException {
@@ -75,15 +72,43 @@ public class StatementExecution {
                PreparedStatementIterator.next().executeUpdate();
            }
        } catch (SQLException e) {
-           connection.rollback ();
+           getConnectionFromPool().rollback ();
            throw new SQLException(e);
        }
+        Connection connection = getConnectionFromPool();
         connection.commit();
+        closeConnectionInPool(connection);
     }
 
     public static ResultSet queryExecution (PreparedStatement statement) throws SQLException {
         result = statement.executeQuery();
+        Connection connection = getConnectionFromPool();
         connection.commit();
+        closeConnectionInPool(connection);
         return result;
+    }
+
+    public static Connection getConnectionFromPool(){
+        Connection connection = null;
+        try{
+            DataSource dataSource = connectionPool.setUpPool();
+           // connectionPool.printDbStatus();
+            connection = dataSource.getConnection();
+           // connectionPool.printDbStatus();
+        } catch(Exception sqlException) {
+            sqlException.printStackTrace();
+        }
+        return connection;
+    }
+
+    public static void closeConnectionInPool(Connection connection){
+        try {
+            if(connection != null) {
+                connection.close();
+            }
+        } catch(Exception sqlException) {
+            sqlException.printStackTrace();
+        }
+       // connectionPool.printDbStatus();
     }
 }

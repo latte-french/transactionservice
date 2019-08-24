@@ -77,7 +77,7 @@ public class AccountStatementCreation {
             statementMessage = "UPDATE accounts SET balance = ? WHERE id = ?";
             statementObjects.add(accountChanges.getBalance().toString());
         }
-        if ((accountChanges.getBalance() == null) && (accountChanges.getCurrency() != null)){
+        else if ((accountChanges.getBalance() == null) && (accountChanges.getCurrency() != null)){
             statementMessage = "UPDATE accounts SET currency = ? WHERE id = ?";
             statementObjects.add(accountChanges.getCurrency());
         }

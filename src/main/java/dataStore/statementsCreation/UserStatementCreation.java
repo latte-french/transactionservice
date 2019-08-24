@@ -68,7 +68,7 @@ public class UserStatementCreation {
             statementMessage = "UPDATE users SET first_name = ? WHERE id = ?";
             statementObjects.add(userChanges.getFirstName());
         }
-        if ((userChanges.getFirstName() == null) &&(userChanges.getLastName() != null)) {
+        else if ((userChanges.getFirstName() == null) &&(userChanges.getLastName() != null)) {
             statementMessage = "UPDATE users SET last_name = ? WHERE id = ?";
             statementObjects.add(userChanges.getLastName());
         }

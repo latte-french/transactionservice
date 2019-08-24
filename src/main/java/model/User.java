@@ -11,7 +11,7 @@ import java.math.BigInteger;
 @Data
 public class User {
 
-    public static volatile BigInteger counter = new BigInteger("4");
+    public static volatile BigInteger counter = new BigInteger("3");
     private BigInteger id;
     private String firstName;
     private String lastName;
