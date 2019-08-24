@@ -19,7 +19,7 @@ public class DatabaseCleanup {
         DatabaseInitialization.populateDatabase();
     }
 
-    private static void cleanDatabase() {
+    public static void cleanDatabase() {
         statementModels = new ArrayList<>();
         try {
             statementModels.add(new StatementModel("DROP TABLE IF EXISTS users"));

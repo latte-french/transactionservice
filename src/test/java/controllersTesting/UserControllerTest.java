@@ -4,6 +4,7 @@ import com.despegar.http.client.*;
 import com.despegar.sparkjava.test.SparkServer;
 import controllers.ExceptionController;
 import controllers.UserController;
+import dataStore.DatabaseCreation;
 import model.Account;
 import model.User;
 import org.junit.Before;
@@ -127,6 +128,22 @@ public class UserControllerTest {
     @Ignore
     @Test
     /*positive test*/
+    public void PutUserChangeFirstAndLastNames() throws HttpClientException {
+        User user = ModelsInitialization.userForTest;
+        String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
+
+        PutMethod put = testServer.put("/users/1", jsonString, false);
+        HttpResponse httpResponse = testServer.execute(put);
+
+        user.setFirstName("Angela");
+        user.setLastName("Wolf");
+        assertEquals(200, httpResponse.code());
+        assertEquals(user.toString(), new String(httpResponse.body()));
+    }
+
+    @Ignore
+    @Test
+    /*positive test*/
     public void DeleteUser() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
         users.remove(0);
@@ -141,4 +158,67 @@ public class UserControllerTest {
 
         assertEquals(users.toString(), new String(httpResponse.body()));
     }
+
+    @Test
+    /*negative test on non-existing user*/
+    public void GetNonExistingUser() throws HttpClientException {
+
+        GetMethod get = testServer.get("/users/7", false);
+        HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("User with id 7 doesn't exist", new String(httpResponse.body()));
+    }
+
+    @Test
+    /*negative test on non-existing user*/
+    public void GetUserEmptyDatabase() throws HttpClientException {
+        DatabaseCleanup.cleanDatabase();
+        DatabaseCreation.initDatabase();
+
+        GetMethod get = testServer.get("/users/2", false);
+        HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("No users exist in the database", new String(httpResponse.body()));
+    }
+
+    @Test
+    /*negative test on empty database*/
+    public void GetUsersEmptyDatabase() throws HttpClientException {
+        DatabaseCleanup.cleanDatabase();
+        DatabaseCreation.initDatabase();
+
+        GetMethod get = testServer.get("/users", false);
+        HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("No users exist in the database", new String(httpResponse.body()));
+    }
+
+    @Test
+    /*negative test*/
+    public void GetAccountsNonExistingUser() throws HttpClientException {
+
+        GetMethod get = testServer.get("/users/7/accounts", false);
+        HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("User with id 7 doesn't exist", new String(httpResponse.body()));
+    }
+
+    @Test
+    /*negative test*/
+    public void GetUserAccountsEmptyDatabase() throws HttpClientException {
+        DatabaseCleanup.cleanDatabase();
+        DatabaseCreation.initDatabase();
+
+        GetMethod get = testServer.get("/users/7/accounts", false);
+        HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("No users exist in the database", new String(httpResponse.body()));
+    }
+
 }
+

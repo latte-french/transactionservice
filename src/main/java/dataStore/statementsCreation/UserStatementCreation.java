@@ -64,17 +64,21 @@ public class UserStatementCreation {
 
         statementObjects = new ArrayList<>();
 
-        if (userChanges.getFirstName() != null){
+        if ((userChanges.getFirstName() != null) && (userChanges.getLastName() == null)){
             statementMessage = "UPDATE users SET first_name = ? WHERE id = ?";
             statementObjects.add(userChanges.getFirstName());
-            statementObjects.add(user.getId().toString());
         }
-        if (userChanges.getLastName() != null) {
+        if ((userChanges.getFirstName() == null) &&(userChanges.getLastName() != null)) {
             statementMessage = "UPDATE users SET last_name = ? WHERE id = ?";
             statementObjects.add(userChanges.getLastName());
-            statementObjects.add(user.getId().toString());
+        }
+        else{
+            statementMessage = "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?";
+            statementObjects.add(userChanges.getFirstName());
+            statementObjects.add(userChanges.getLastName());
         }
 
+        statementObjects.add(user.getId().toString());
         return new StatementModel(statementMessage, statementObjects);
 
     }

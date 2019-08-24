@@ -20,20 +20,24 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    public User getUser(BigInteger id) throws SQLException, NoSuchUserException {
-        User user = UserStore.getUserFromDB(id);
-        if (user.getId() == null)  {
-            LOGGER.error("User with id " + id + " doesn't exist");
-            throw new NoSuchUserException(id);
+    public User getUser(BigInteger id) throws SQLException, NoUsersExistException, NoSuchUserException {
+        User user = new User();
+        if (getUsers().size() != 0) {
+            user = UserStore.getUserFromDB(id);
+            if (user.getId() == null) {
+                LOGGER.error("User with id " + id + " doesn't exist");
+                throw new NoSuchUserException(id);
+            }
         }
         return user;
     }
 
-    public List<Account> getAccountsOfUser (BigInteger id) throws NoUserAccountsException, SQLException{
+    public List<Account> getAccountsOfUser (BigInteger id) throws
+            NoUserAccountsException, NoUsersExistException, NoSuchUserException, SQLException{
 
         List<Account> userAccounts = new ArrayList<>();
 
-        if (getUser(id) != null) {
+        if ((getUser(id) != null) && (getUsers().size() != 0)){
             userAccounts = AccountStore.getAccountsOfUserFromDB(id);
                 if (userAccounts.size() == 0) {
                     LOGGER.error("No accounts belong to the user with id = " + id);
@@ -53,17 +57,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public void createUser(User user) throws SQLException {
-        UserStore.putUserToDB(user);
+            UserStore.putUserToDB(user);
     }
 
-    public void removeUser(BigInteger id) throws NoSuchUserException, SQLException{
-        if (getUser(id) != null) {
+    public void removeUser(BigInteger id) throws NoSuchUserException, NoUsersExistException, SQLException{
+        if ((getUser(id) != null) && (getUsers().size() != 0)) {
             UserStore.removeUserFromDB(id);
         }
     }
 
-    public void updateUser(User user, User userChanges) throws NoSuchUserException, SQLException{
-        if (getUser(user.getId()) != null) {
+    public void updateUser(User user, User userChanges) throws NoSuchUserException, NoUsersExistException, SQLException{
+        if ((getUser(user.getId()) != null) && (getUsers().size() != 0)) {
             UserStore.updateUserInDB(user, userChanges);
         }
     }

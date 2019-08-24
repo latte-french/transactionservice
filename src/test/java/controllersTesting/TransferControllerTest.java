@@ -11,6 +11,7 @@ import controllers.TransferController;
 import model.Transfer;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import service.impl.AccountServiceImpl;
 import service.impl.TransferServiceImpl;
@@ -46,6 +47,7 @@ public class TransferControllerTest {
         ModelsInitialization.init();
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void PostTransfer() throws HttpClientException {

@@ -17,11 +17,15 @@ public class AccountServiceImpl implements AccountService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
-    public Account getAccount(BigInteger id) throws NoSuchAccountException, SQLException {
-        Account account = AccountStore.getAccountFromDB(id);
-        if (account.getId() == null)  {
-            LOGGER.error("Account with id " + id + " doesn't exist");
-            throw new NoSuchAccountException(id);
+    public Account getAccount(BigInteger id) throws NoSuchAccountException, NoAccountsExistException,
+            SQLException {
+        Account account = new Account();
+        if (getAccounts().size() != 0) {
+            account = AccountStore.getAccountFromDB(id);
+            if (account.getId() == null) {
+                LOGGER.error("Account with id " + id + " doesn't exist");
+                throw new NoSuchAccountException(id);
+            }
         }
         return account;
     }
@@ -39,14 +43,16 @@ public class AccountServiceImpl implements AccountService {
         return accounts;
     }
 
-    public void removeAccount(BigInteger id) throws NoSuchAccountException, SQLException {
-        if (getAccount(id) != null) {
+    public void removeAccount(BigInteger id) throws NoSuchAccountException, NoAccountsExistException,
+            SQLException {
+        if ((getAccount(id) != null) && (getAccounts().size() != 0)) {
             AccountStore.removeAccountFromDB(id);
         }
     }
 
-    public void updateAccount(Account account, Account accountChanges) throws NoSuchAccountException, SQLException{
-        if (getAccount(account.getId()) != null) {
+    public void updateAccount(Account account, Account accountChanges) throws NoSuchAccountException,
+            NoAccountsExistException, SQLException{
+        if ((getAccount(account.getId()) != null) && (getAccounts().size() != 0)) {
             AccountStore.updateAccountInDB(account, accountChanges);
         }
     }
