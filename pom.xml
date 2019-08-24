@@ -21,7 +21,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>2.6.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -53,7 +53,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M3</version>
                 <configuration>
-                    <forkCount>3</forkCount>
+                    <forkCount>6</forkCount>
                     <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>

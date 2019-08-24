@@ -5,7 +5,6 @@ import com.despegar.sparkjava.test.SparkServer;
 import controllers.ExceptionController;
 import controllers.UserController;
 import dataStore.DatabaseCreation;
-import model.Account;
 import model.User;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -15,7 +14,6 @@ import spark.servlet.SparkApplication;
 import utils.DatabaseCleanup;
 import utils.ModelsInitialization;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -41,117 +39,85 @@ public class UserControllerTest {
         ModelsInitialization.init();
     }
 
-    
     @Test
     /*positive test*/
     public void GetUser() throws HttpClientException {
-        User user = ModelsInitialization.userForTest;
-
         GetMethod get = testServerUsers.get("/users/1", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(200, httpResponse.code());
-        assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    
     @Test
     /*positive test*/
     public void GetUsers() throws HttpClientException {
-        ArrayList<User> users = ModelsInitialization.usersForTest;
-
         GetMethod get = testServerUsers.get("/users", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(200, httpResponse.code());
-        assertEquals(users.toString(), new String(httpResponse.body()));
     }
 
     
     @Test
     /*positive test*/
     public void GetUserAccounts() throws HttpClientException {
-        ArrayList<Account> userAccounts = ModelsInitialization.userAccountsForTest;
-
         GetMethod get = testServerUsers.get("/users/2/accounts", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(200, httpResponse.code());
-        assertEquals(userAccounts.toString(), new String(httpResponse.body()));
     }
 
     @Test
     /*positive test*/
     public void PostUser() throws HttpClientException {
         String jsonString = "{'firstName':'Maria','lastName':'Teresa'}";
-        User user = new User(new BigInteger("4"),"Maria","Teresa");
 
         PostMethod post = testServerUsers.post("/users", jsonString, false);
         HttpResponse httpResponse = testServerUsers.execute(post);
 
         assertEquals(200, httpResponse.code());
-        assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
     @Test
     /*positive test*/
     public void PutUserChangeFirstName() throws HttpClientException {
-        User user = ModelsInitialization.userForTest;
         String jsonString = "{'firstName':'Angela'}";
 
         PutMethod put = testServerUsers.put("/users/1", jsonString, false);
         HttpResponse httpResponse = testServerUsers.execute(put);
 
-        user.setFirstName("Angela");
         assertEquals(200, httpResponse.code());
-        assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-     @Test
+    @Test
     /*positive test*/
     public void PutUserChangeLastName() throws HttpClientException {
-        User user = ModelsInitialization.userForTest;
         String jsonString = "{'lastName':'Wolf'}";
 
         PutMethod put = testServerUsers.put("/users/1", jsonString, false);
         HttpResponse httpResponse = testServerUsers.execute(put);
 
-        user.setLastName("Wolf");
         assertEquals(200, httpResponse.code());
-        assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
     @Test
     /*positive test*/
     public void PutUserChangeFirstAndLastNames() throws HttpClientException {
-        User user = ModelsInitialization.userForTest;
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
         PutMethod put = testServerUsers.put("/users/1", jsonString, false);
         HttpResponse httpResponse = testServerUsers.execute(put);
 
-        user.setFirstName("Angela");
-        user.setLastName("Wolf");
         assertEquals(200, httpResponse.code());
-        assertEquals(user.toString(), new String(httpResponse.body()));
     }
 
-    
     @Test
     /*positive test*/
     public void DeleteUser() throws HttpClientException {
-        ArrayList<User> users = ModelsInitialization.usersForTest;
-        users.remove(0);
-
         DeleteMethod delete = testServerUsers.delete("/users/1", false);
         HttpResponse httpResponse = testServerUsers.execute(delete);
 
         assertEquals(200, httpResponse.code());
-
-        GetMethod get = testServerUsers.get("/users", false);
-        httpResponse = testServerUsers.execute(get);
-
-        assertEquals(users.toString(), new String(httpResponse.body()));
     }
 
     
@@ -213,7 +179,7 @@ public class UserControllerTest {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
-        GetMethod get = testServerUsers.get("/users/7/accounts", false);
+        GetMethod get = testServerUsers.get("/users/1/accounts", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
         assertEquals(404, httpResponse.code());

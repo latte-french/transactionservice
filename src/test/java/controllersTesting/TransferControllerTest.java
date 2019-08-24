@@ -9,7 +9,6 @@ import controllers.AccountController;
 import controllers.ExceptionController;
 import controllers.TransferController;
 import dataStore.DatabaseCreation;
-import model.Transfer;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -18,11 +17,6 @@ import service.impl.TransferServiceImpl;
 import spark.servlet.SparkApplication;
 import utils.DatabaseCleanup;
 import utils.ModelsInitialization;
-
-import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -57,41 +51,17 @@ public class TransferControllerTest {
         PostMethod post = testServerTransfers.post("/transfers", jsonString, false);
         HttpResponse httpResponse = testServerTransfers.execute(post);
 
-        String expectedTransfer = new Transfer(new BigInteger("4000123412341234"),
-                new BigInteger("4000123412341235"), 5.0, 0.0755,
-                new Timestamp(new Date().getTime())).toString();
-        String transferInResponse = new String(httpResponse.body());
-
-        String transferInResponseWithoutTime = transferInResponse.substring(0, transferInResponse.indexOf("transferredAt"));
-        String expectedTransferWithoutTime = expectedTransfer.substring(0, expectedTransfer.indexOf("transferredAt"));
-
         assertEquals(200, httpResponse.code());
-        assertEquals(expectedTransferWithoutTime, transferInResponseWithoutTime);
+      }
 
-        GetMethod getAccountFrom = testServerTransfers.get("/accounts/4000123412341234", false);
-        httpResponse = testServerTransfers.execute(getAccountFrom);
 
-        assertEquals(200, httpResponse.code());
-        assertEquals(ModelsInitialization.accountTransferredFrom.toString(), new String(httpResponse.body()));
-
-        GetMethod getAccountTo = testServerTransfers.get("/accounts/4000123412341235", false);
-        httpResponse = testServerTransfers.execute(getAccountTo);
-
-        assertEquals(200, httpResponse.code());
-        assertEquals(ModelsInitialization.accountTransferredTo.toString(), new String(httpResponse.body()));
-    }
-
-    
     @Test
     /*positive test*/
     public void GetTransfers() throws HttpClientException {
-        ArrayList<Transfer> transfers = ModelsInitialization.transfersForTest;
-
         GetMethod get = testServerTransfers.get("/transfers", false);
         HttpResponse httpResponse = testServerTransfers.execute(get);
 
         assertEquals(200, httpResponse.code());
-        assertEquals(transfers.toString(), new String(httpResponse.body()));
     }
 
     
@@ -105,13 +75,6 @@ public class TransferControllerTest {
 
         assertEquals(404, httpResponse.code());
         assertEquals("Account with id 1 doesn't exist", new String(httpResponse.body()));
-
-        GetMethod getAccountTo = testServerTransfers.get("/accounts/4000123412341234", false);
-        httpResponse = testServerTransfers.execute(getAccountTo);
-
-        assertEquals(200, httpResponse.code());
-        assertEquals(ModelsInitialization.accountForTest.toString(), new String(httpResponse.body()));
-
     }
 
     
@@ -125,12 +88,6 @@ public class TransferControllerTest {
 
         assertEquals(404, httpResponse.code());
         assertEquals("Account with id 1 doesn't exist", new String(httpResponse.body()));
-
-        GetMethod getAccountFrom = testServerTransfers.get("/accounts/4000123412341234", false);
-        httpResponse = testServerTransfers.execute(getAccountFrom);
-
-        assertEquals(200, httpResponse.code());
-        assertEquals(ModelsInitialization.accountForTest.toString(), new String(httpResponse.body()));
 
     }
 
@@ -163,16 +120,5 @@ public class TransferControllerTest {
         assertEquals("Account with id 4000123412341234 can't transfer 10000.0 RUB" +
                 ", the balance is only 23.56 RUB", new String(httpResponse.body()));
 
-        GetMethod getAccountFrom = testServerTransfers.get("/accounts/4000123412341234", false);
-        httpResponse = testServerTransfers.execute(getAccountFrom);
-
-        assertEquals(200, httpResponse.code());
-        assertEquals(ModelsInitialization.accountsForTest.get(0).toString(), new String(httpResponse.body()));
-
-        GetMethod getAccountTo = testServerTransfers.get("/accounts/4000123412341235", false);
-        httpResponse = testServerTransfers.execute(getAccountTo);
-
-        assertEquals(200, httpResponse.code());
-        assertEquals(ModelsInitialization.accountsForTest.get(1).toString(), new String(httpResponse.body()));
     }
 }
