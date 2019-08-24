@@ -159,6 +159,7 @@ public class UserControllerTest {
         assertEquals(users.toString(), new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*negative test on non-existing user*/
     public void GetNonExistingUser() throws HttpClientException {
@@ -170,6 +171,7 @@ public class UserControllerTest {
         assertEquals("User with id 7 doesn't exist", new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*negative test on non-existing user*/
     public void GetUserEmptyDatabase() throws HttpClientException {
@@ -183,6 +185,7 @@ public class UserControllerTest {
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*negative test on empty database*/
     public void GetUsersEmptyDatabase() throws HttpClientException {
@@ -196,8 +199,9 @@ public class UserControllerTest {
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
-    /*negative test*/
+    /*negative test on non-existing user*/
     public void GetAccountsNonExistingUser() throws HttpClientException {
 
         GetMethod get = testServer.get("/users/7/accounts", false);
@@ -207,14 +211,84 @@ public class UserControllerTest {
         assertEquals("User with id 7 doesn't exist", new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
-    /*negative test*/
+    /*negative test on empty database*/
     public void GetUserAccountsEmptyDatabase() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
         GetMethod get = testServer.get("/users/7/accounts", false);
         HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("No users exist in the database", new String(httpResponse.body()));
+    }
+
+    @Ignore
+    @Test
+    /*negative test when no accounts exist for this user*/
+    public void GetNoAccountsBelongToUser() throws HttpClientException {
+
+        GetMethod get = testServer.get("/users/3/accounts", false);
+        HttpResponse httpResponse = testServer.execute(get);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("No accounts belong to the user with id = 3", new String(httpResponse.body()));
+    }
+
+    @Ignore
+    @Test
+    /*negative test on non-existing user*/
+    public void PutNonExistingUser() throws HttpClientException {
+        String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
+
+        PutMethod put = testServer.put("/users/4", jsonString, false);
+        HttpResponse httpResponse = testServer.execute(put);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("User with id 4 doesn't exist", new String(httpResponse.body()));
+    }
+
+    @Ignore
+    @Test
+    /*negative test on empty database*/
+    public void PutUserEmptyDatabase() throws HttpClientException {
+        DatabaseCleanup.cleanDatabase();
+        DatabaseCreation.initDatabase();
+
+        String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
+
+        PutMethod put = testServer.put("/users/4", jsonString, false);
+        HttpResponse httpResponse = testServer.execute(put);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("No users exist in the database", new String(httpResponse.body()));
+    }
+
+    @Ignore
+    @Test
+    /*negative test on non-existing user*/
+    public void DeleteNonExistingUser() throws HttpClientException {
+        ArrayList<User> users = ModelsInitialization.usersForTest;
+        users.remove(0);
+
+        DeleteMethod delete = testServer.delete("/users/4", false);
+        HttpResponse httpResponse = testServer.execute(delete);
+
+        assertEquals(404, httpResponse.code());
+        assertEquals("User with id 4 doesn't exist", new String(httpResponse.body()));
+    }
+
+    @Ignore
+    @Test
+    /*negative test on empty database*/
+    public void DeleteUserEmpty() throws HttpClientException {
+        DatabaseCleanup.cleanDatabase();
+        DatabaseCreation.initDatabase();
+
+        DeleteMethod delete = testServer.delete("/users/1", false);
+        HttpResponse httpResponse = testServer.execute(delete);
 
         assertEquals(404, httpResponse.code());
         assertEquals("No users exist in the database", new String(httpResponse.body()));

@@ -9,7 +9,7 @@ public class BalanceNotEnoughException extends RuntimeException {
     private final Double sumToTransfer;
 
     public String getMessage() {
-        return "Account with id " + account.getId() + " can't tranfer " + sumToTransfer + " " + account.getCurrency() +
+        return "Account with id " + account.getId() + " can't transfer " + sumToTransfer + " " + account.getCurrency() +
                 ", the balance is only " + account.getBalance() + " " + account.getCurrency();
     }
 }

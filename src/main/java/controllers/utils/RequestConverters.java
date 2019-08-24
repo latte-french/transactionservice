@@ -36,7 +36,7 @@ public class RequestConverters {
 
     public static User getUserFromPostUserRequest(Request request){
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
-        User.counter.add(BigInteger.ONE);
+        User.increaseCounter();
         return new User(User.counter, obj.get("firstName").getAsString(), obj.get("lastName").getAsString());
     }
 

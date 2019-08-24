@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 public class DatabaseCleanup {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseInitialization.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseInitializationTest.class);
     private static ArrayList<StatementModel> statementModels;
 
     public static void prepareDatabase(){
         cleanDatabase();
         DatabaseCreation.initDatabase();
-        DatabaseInitialization.populateDatabase();
+        DatabaseInitializationTest.populateDatabase();
     }
 
     public static void cleanDatabase() {
