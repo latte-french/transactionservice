@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         List<Account> userAccounts = new ArrayList<>();
 
         if (getUser(id) != null) {
-            AccountStore.getAccountsOfUserFromDB(id);
+            userAccounts = AccountStore.getAccountsOfUserFromDB(id);
                 if (userAccounts.size() == 0) {
                     LOGGER.error("No accounts belong to the user with id = " + id);
                     throw new NoUserAccountsException(id);
@@ -62,9 +62,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public void updateUser(User user) throws NoSuchUserException, SQLException{
+    public void updateUser(User user, User userChanges) throws NoSuchUserException, SQLException{
         if (getUser(user.getId()) != null) {
-            UserStore.updateUserInDB(user);
+            UserStore.updateUserInDB(user, userChanges);
         }
     }
 }

@@ -41,7 +41,7 @@ public class TransferServiceImpl implements TransferService {
             accountFrom.setBalance(accountFrom.getBalance() - sumToTransfer);
             accountTo.setBalance(accountTo.getBalance() + transfer.getSumTransferred());
 
-            TransferStore.putTransferToDB(transfer);
+            TransferStore.putTransferToDB(transfer, accountFrom, accountTo);
     }
 
     public List<Transfer> getTransfers() throws NoTransfersExistException, SQLException {

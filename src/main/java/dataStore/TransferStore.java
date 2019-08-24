@@ -27,9 +27,7 @@ public class TransferStore {
     }
 
 
-    public static void putTransferToDB(Transfer transfer) throws NoSuchAccountException, SQLException {
-        Account accountFrom = accountService.getAccount(transfer.getAccountFromId());
-        Account accountTo = accountService.getAccount(transfer.getAccountToId());
+    public static void putTransferToDB(Transfer transfer, Account accountFrom, Account accountTo) throws NoSuchAccountException, SQLException {
         statementModels = new ArrayList<>();
 
         statementModels.add(TransferStatementCreation.putTransferStatement(transfer, accountFrom, accountTo));

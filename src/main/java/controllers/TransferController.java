@@ -20,7 +20,7 @@ public class TransferController {
         post("/transfers", (req, res) -> {
             Transfer transfer = RequestConverters.getTransferFromPostTransferRequest(req);
             transferService.createTransfer(transfer);
-            return ("Transfer made: " + transfer.toString());
+            return transfer;
         });
 
         get("/transfers", (req, res) -> {

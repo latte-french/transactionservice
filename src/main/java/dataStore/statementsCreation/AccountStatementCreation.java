@@ -73,17 +73,21 @@ public class AccountStatementCreation {
 
        statementObjects = new ArrayList<>();
 
-        if (accountChanges.getBalance() != null){
+        if ((accountChanges.getBalance() != null) && (accountChanges.getCurrency() == null)){
             statementMessage = "UPDATE accounts SET balance = ? WHERE id = ?";
             statementObjects.add(accountChanges.getBalance().toString());
-            statementObjects.add(account.getId().toString());
         }
-        if (accountChanges.getCurrency() != null){
+        if ((accountChanges.getBalance() == null) && (accountChanges.getCurrency() != null)){
             statementMessage = "UPDATE accounts SET currency = ? WHERE id = ?";
             statementObjects.add(accountChanges.getCurrency());
-            statementObjects.add(account.getId().toString());
+        }
+        else{
+            statementMessage = "UPDATE accounts SET balance = ?, currency = ? WHERE id = ?";
+            statementObjects.add(accountChanges.getBalance().toString());
+            statementObjects.add(accountChanges.getCurrency());
         }
 
+        statementObjects.add(account.getId().toString());
         return new StatementModel(statementMessage, statementObjects);
     }
 

@@ -52,9 +52,9 @@ public class UserStore {
         StatementExecution.prepareAndExecuteStatements(statementModels);
     }
 
-    public static void updateUserInDB(User user) throws SQLException{
+    public static void updateUserInDB(User user, User userChanges) throws SQLException{
 
-        statementModel = UserStatementCreation.updateUserStatement(user);
+        statementModel = UserStatementCreation.updateUserStatement(user, userChanges);
         StatementExecution.prepareAndExecuteStatement(statementModel);
 
     }

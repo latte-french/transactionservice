@@ -27,7 +27,7 @@ public class UserController {
             return userService.getUser(id);
         });
 
-        get("users/:id/accounts", (req, res) -> {
+        get("/users/:id/accounts", (req, res) -> {
             BigInteger id = new BigInteger(req.params("id"));
             return userService.getAccountsOfUser(id);
         });
@@ -36,19 +36,21 @@ public class UserController {
         post("/users", (req, res) -> {
             User user = RequestConverters.getUserFromPostUserRequest(req);
             userService.createUser(user);
-            return "OK";
+            return userService.getUser(user.getId());
         });
 
         put("/users/:id", (req, res) -> {
-            User user = RequestConverters.getUserFromPutUserRequest(req);
-            userService.updateUser(user);
-            return "OK";
+            BigInteger id = new BigInteger(req.params("id"));
+            User user = userService.getUser(id);
+            User userChanges = RequestConverters.getUserFromPutUserRequest(req);
+            userService.updateUser(user, userChanges);
+            return userService.getUser(id);
         });
 
         delete("/users/:id", (req, res) -> {
             BigInteger id = new BigInteger(req.params("id"));
             userService.removeUser(id);
-            return "OK";
+            return "User deleted";
         });
 
     }

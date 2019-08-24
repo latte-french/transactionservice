@@ -7,6 +7,7 @@ import controllers.ExceptionController;
 import model.Account;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import service.impl.AccountServiceImpl;
 import spark.servlet.SparkApplication;
@@ -39,6 +40,7 @@ public class AccountControllerTest {
         ModelsInitialization.init();
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void GetAccount() throws HttpClientException {
@@ -51,6 +53,7 @@ public class AccountControllerTest {
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void GetAccounts() throws HttpClientException {
@@ -63,6 +66,7 @@ public class AccountControllerTest {
         assertEquals(accounts.toString(), new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void PostAccount() throws HttpClientException {
@@ -76,6 +80,7 @@ public class AccountControllerTest {
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void PutAccountChangeBalance() throws HttpClientException {
@@ -90,6 +95,7 @@ public class AccountControllerTest {
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void PutAccountChangeCurrency() throws HttpClientException {
@@ -104,6 +110,7 @@ public class AccountControllerTest {
         assertEquals(account.toString(), new String(httpResponse.body()));
     }
 
+    @Ignore
     @Test
     /*positive test*/
     public void DeleteAccount() throws HttpClientException {
@@ -111,13 +118,13 @@ public class AccountControllerTest {
         accounts.remove(0);
 
         DeleteMethod delete = testServer.delete("/accounts/4000123412341234", false);
-        HttpResponse httpResponseDelete = testServer.execute(delete);
+        HttpResponse httpResponse = testServer.execute(delete);
 
-        assertEquals(200, httpResponseDelete.code());
+        assertEquals(200, httpResponse.code());
 
         GetMethod get = testServer.get("/accounts", false);
-        HttpResponse httpResponseGet = testServer.execute(get);
+        httpResponse = testServer.execute(get);
 
-        assertEquals(accounts.toString(), new String(httpResponseGet.body()));
+        assertEquals(accounts.toString(), new String(httpResponse.body()));
     }
 }

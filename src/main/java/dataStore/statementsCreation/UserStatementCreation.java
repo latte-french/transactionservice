@@ -60,18 +60,18 @@ public class UserStatementCreation {
         return new StatementModel(statementMessage, statementObjects);
     }
 
-    public static StatementModel updateUserStatement(User user){
+    public static StatementModel updateUserStatement(User user, User userChanges){
 
         statementObjects = new ArrayList<>();
 
-        if (user.getFirstName() != null){
+        if (userChanges.getFirstName() != null){
             statementMessage = "UPDATE users SET first_name = ? WHERE id = ?";
-            statementObjects.add(user.getFirstName());
+            statementObjects.add(userChanges.getFirstName());
             statementObjects.add(user.getId().toString());
         }
-        if (user.getLastName() != null) {
+        if (userChanges.getLastName() != null) {
             statementMessage = "UPDATE users SET last_name = ? WHERE id = ?";
-            statementObjects.add(user.getLastName());
+            statementObjects.add(userChanges.getLastName());
             statementObjects.add(user.getId().toString());
         }
 

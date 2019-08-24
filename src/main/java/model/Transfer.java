@@ -15,5 +15,5 @@ public class Transfer {
     BigInteger accountToId;
     Double sumToTransfer;
     Double sumTransferred;
-    Timestamp TransferredAt;
+    Timestamp transferredAt;
 }

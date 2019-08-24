@@ -21,5 +21,5 @@ public interface UserService {
 
     void removeUser(BigInteger id) throws NoSuchUserException, SQLException;
 
-    void updateUser(User user) throws NoSuchUserException, SQLException;
+    void updateUser(User user, User userChanges) throws NoSuchUserException, SQLException;
 }
