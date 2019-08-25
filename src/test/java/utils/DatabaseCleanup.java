@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class DatabaseCleanup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseInitializationTest.class);
-    private static ArrayList statementModels;
 
     public static void prepareDatabase(){
         cleanDatabase();
@@ -20,7 +19,7 @@ public class DatabaseCleanup {
     }
 
     public static void cleanDatabase() {
-        statementModels = new ArrayList();
+        ArrayList<StatementModel> statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("DROP TABLE IF EXISTS users"));
             statementModels.add(new StatementModel("DROP TABLE IF EXISTS accounts"));

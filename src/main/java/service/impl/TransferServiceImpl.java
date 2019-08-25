@@ -24,7 +24,7 @@ public class TransferServiceImpl implements TransferService {
         this.accountService = accountService;
     }
 
-    public void createTransfer(Transfer transfer) throws NoSuchAccountException, BalanceNotEnoughException, SQLException {
+    public synchronized void createTransfer(Transfer transfer) throws NoSuchAccountException, BalanceNotEnoughException, SQLException {
             Account accountFrom = accountService.getAccount(transfer.getAccountFromId());
             Account accountTo = accountService.getAccount(transfer.getAccountToId());
             Double sumToTransfer = transfer.getSumToTransfer();

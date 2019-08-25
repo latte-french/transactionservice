@@ -15,7 +15,9 @@ import java.util.Iterator;
 
 public class StatementExecution {
 
+    private static final ConnectionPool connectionPool = new ConnectionPool();
     private static final Logger LOGGER = LoggerFactory.getLogger(StatementExecution.class);
+
 
     public static ResultSet prepareAndExecuteQuery (StatementModel statementModel) throws SQLException {
         PreparedStatement statement = prepareStatementForExecution(statementModel);
@@ -34,14 +36,14 @@ public class StatementExecution {
         while (statementModelsIterator.hasNext()) {
             statements.add(prepareStatementForExecution(statementModelsIterator.next()));
         }
-
         statementsExecution(statements);
     }
 
-    public static PreparedStatement prepareStatementForExecution (StatementModel statementModel) throws SQLException {
+    public static synchronized PreparedStatement prepareStatementForExecution (StatementModel statementModel) throws SQLException {
         String statementMessage = statementModel.getStatementMessage();
         ArrayList<String> statementObjects = statementModel.getStatementObjects();
-        PreparedStatement statement = getConnectionFromPool().prepareStatement(statementMessage);
+        Connection connection = getConnectionFromPool();
+        PreparedStatement statement = connection.prepareStatement(statementMessage);
         //connectionPool.printDbStatus();
 
         Iterator<String> statementObjectsIterator = statementObjects.iterator();
@@ -54,7 +56,7 @@ public class StatementExecution {
         return statement;
     }
 
-    public static void statementExecution (PreparedStatement statement) throws SQLException {
+    public static synchronized void statementExecution (PreparedStatement statement) throws SQLException {
 
         statement.executeUpdate();
         Connection connection = getConnectionFromPool();
@@ -62,7 +64,7 @@ public class StatementExecution {
         closeConnectionInPool(connection);
     }
 
-    public static void statementsExecution (ArrayList<PreparedStatement> statements) throws SQLException {
+    public static synchronized void statementsExecution (ArrayList<PreparedStatement> statements) throws SQLException {
         try {
             Iterator<PreparedStatement> PreparedStatementIterator = statements.iterator();
             while (PreparedStatementIterator.hasNext()) {
@@ -77,7 +79,7 @@ public class StatementExecution {
         closeConnectionInPool(connection);
     }
 
-    public static ResultSet queryExecution (PreparedStatement statement) throws SQLException {
+    public static synchronized ResultSet queryExecution (PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         Connection connection = getConnectionFromPool();
         connection.commit();
@@ -85,10 +87,9 @@ public class StatementExecution {
         return result;
     }
 
-    public static Connection getConnectionFromPool(){
+    public static synchronized Connection getConnectionFromPool(){
         Connection connection = null;
         try{
-            ConnectionPool connectionPool = new ConnectionPool();
             DataSource dataSource = connectionPool.setUpPool();
             // connectionPool.printDbStatus();
             connection = dataSource.getConnection();
@@ -99,7 +100,7 @@ public class StatementExecution {
         return connection;
     }
 
-    public static void closeConnectionInPool(Connection connection){
+    public static synchronized void closeConnectionInPool(Connection connection){
         try {
             if(connection != null) {
                 connection.close();

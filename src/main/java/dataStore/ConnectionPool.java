@@ -1,4 +1,5 @@
 package dataStore;
+
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
@@ -23,13 +24,21 @@ public class ConnectionPool {
         Class.forName(JDBC_DRIVER);
 
         genericObjectPoolPool = new GenericObjectPool();
-        genericObjectPoolPool.setMaxActive(10);
+        genericObjectPoolPool.setMaxActive(1000);
 
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(JDBC_DB_URL, JDBC_USER, JDBC_PASS);
 
 
-        PoolableConnectionFactory pcf = new PoolableConnectionFactory(connectionFactory, genericObjectPoolPool,
-                null, null, false, true);
+        PoolableConnectionFactory pcf;
+
+        try {
+            pcf = new PoolableConnectionFactory(connectionFactory, genericObjectPoolPool,
+                    null, null, false, true);
+
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+
         return new PoolingDataSource(genericObjectPoolPool);
     }
 

@@ -15,6 +15,13 @@ public class AccountStatementCreation {
         return new StatementModel(statementMessage, statementObjects);
     }
 
+    public static StatementModel getAccountBalanceStatement(BigInteger id) {
+        String statementMessage ="SELECT balance FROM accounts WHERE id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
+        statementObjects.add(id.toString());
+        return new StatementModel(statementMessage, statementObjects);
+    }
+
     public static StatementModel getAccountsStatement () {
         String statementMessage = "SELECT * FROM accounts";
         return new StatementModel(statementMessage);
@@ -89,4 +96,6 @@ public class AccountStatementCreation {
         statementObjects.add(account.getId().toString());
         return new StatementModel(statementMessage, statementObjects);
     }
+
+
 }
