@@ -18,10 +18,13 @@ You can launch it via command
 
 `java -jar transactionservice\target\transaction-service-1.0-SNAPSHOT.jar`
 
-The Spark application starts on http://localhost:8080
+*Additional details:*
 
-PUT and POST methods require a json as a parameter.
- 
+1. The Spark application starts on http://localhost:8080
+
+2. PUT and POST methods require a json as a parameter.
+
+3. Initially 'users', 'accounts' and 'user_accounts' tables are filled with some data. 
 
 ## RESTful API examples: ##
 
@@ -147,3 +150,20 @@ Examples of implemented exceptions:
 5) **"No accounts belong to the user with id = 9"** - *no comments*
 6) **"Account with id 4000123412341235 can't transfer 10000 RUB, the balance is only 5 RUB"** - when the balance of the first account isn't enough for transferring money
 7) **"No transfers exist in the database"** - if you're trying to request transfers when the 'transfers' database table is empty
+
+## Test coverage ##
+- tests for Restful API
+
+- test for services
+
+- E2E tests
+
+- tests with multiple threads
+
+## Used frameworks ##
+
+1. Spark for implementing the RESTful API
+2. HSQLDB as an embedded database with a connection pool
+3. JUnit for testing
+4. Project Lombok to make the life easier
+5. Some small, not well-known frameworks for load testing and making a connection pool. 
