@@ -13,20 +13,21 @@ import java.util.Date;
 
 public class RequestConverters {
 
-    public static JsonParser parser = new JsonParser();
-
     public static Account getAccountFromPostAccountRequest(Request request){
+        JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
         Account.increaseCounter();
         return new Account(Account.counter, obj.get("balance").getAsDouble(), obj.get("currency").getAsString());
     }
 
     public static BigInteger getUserIdFromPostAccountRequest(Request request){
+        JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
         return obj.get("userId").getAsBigInteger();
     }
 
     public static Account getAccountFromPutAccountRequest(Request request){
+        JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
         Account account = new Account();
         if (obj.get("balance") != null) {account.setBalance(obj.get("balance").getAsDouble());}
@@ -35,12 +36,14 @@ public class RequestConverters {
     }
 
     public static User getUserFromPostUserRequest(Request request){
+        JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
         User.increaseCounter();
         return new User(User.counter, obj.get("firstName").getAsString(), obj.get("lastName").getAsString());
     }
 
     public static User getUserFromPutUserRequest(Request request){
+        JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
         User user = new User();
         if (obj.get("firstName") != null) {user.setFirstName(obj.get("firstName").getAsString());}
@@ -50,6 +53,7 @@ public class RequestConverters {
     }
 
     public static Transfer getTransferFromPostTransferRequest(Request request){
+        JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(request.body()).getAsJsonObject();
         Transfer transfer = new Transfer();
         transfer.setAccountFromId(obj.get("from").getAsBigInteger());

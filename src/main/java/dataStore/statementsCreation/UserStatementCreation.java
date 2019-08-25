@@ -8,25 +8,22 @@ import java.util.ArrayList;
 
 public class UserStatementCreation {
 
-    private static String statementMessage;
-    private static ArrayList<String> statementObjects;
-
     public static StatementModel getUserStatement(BigInteger id) {
-        statementMessage = "SELECT * FROM users WHERE id = ?";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "SELECT * FROM users WHERE id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
 
         return new StatementModel(statementMessage, statementObjects);
     }
 
     public static StatementModel getUsersStatement() {
-        statementMessage = "SELECT * FROM users";
+        String statementMessage = "SELECT * FROM users";
         return new StatementModel(statementMessage);
     }
 
     public static StatementModel putUserStatement(User user){
-        statementMessage = "INSERT INTO users VALUES (?,?,?)";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "INSERT INTO users VALUES (?,?,?)";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(user.getId().toString());
         statementObjects.add(user.getFirstName());
         statementObjects.add(user.getLastName());
@@ -36,16 +33,16 @@ public class UserStatementCreation {
     }
 
     public static StatementModel removeUserStatement (BigInteger id){
-        statementMessage = "DELETE FROM users WHERE id = ?";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "DELETE FROM users WHERE id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
 
         return new StatementModel(statementMessage, statementObjects);
     }
 
     public static StatementModel removeUsersAccountsStatement(BigInteger id){
-        statementMessage = "DELETE FROM accounts WHERE id in (SELECT account_id FROM user_accounts WHERE user_id = ?)";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "DELETE FROM accounts WHERE id in (SELECT account_id FROM user_accounts WHERE user_id = ?)";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
 
         return new StatementModel(statementMessage, statementObjects);
@@ -53,8 +50,8 @@ public class UserStatementCreation {
     }
 
     public static StatementModel removeUserAccountDependencyStatement(BigInteger id){
-        statementMessage = "DELETE FROM user_accounts WHERE user_id = ?";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "DELETE FROM user_accounts WHERE user_id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
 
         return new StatementModel(statementMessage, statementObjects);
@@ -62,7 +59,8 @@ public class UserStatementCreation {
 
     public static StatementModel updateUserStatement(User user, User userChanges){
 
-        statementObjects = new ArrayList<>();
+        String statementMessage;
+        ArrayList<String> statementObjects = new ArrayList<>();
 
         if ((userChanges.getFirstName() != null) && (userChanges.getLastName() == null)){
             statementMessage = "UPDATE users SET first_name = ? WHERE id = ?";

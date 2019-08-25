@@ -9,11 +9,11 @@ public class StatementModel {
 
     @Getter
     @Setter
-    private String statementMessage = "";
+    private final String statementMessage;
 
     @Getter
     @Setter
-    private ArrayList<String> statementObjects = new ArrayList<>();
+    private final ArrayList<String> statementObjects;
 
     public StatementModel(String statementMessage, ArrayList<String> statementObjects){
         this.statementMessage = statementMessage;
@@ -21,9 +21,9 @@ public class StatementModel {
     }
 
     public StatementModel(String statementMessage){
-        this.statementMessage = statementMessage;
+        this(statementMessage, new ArrayList<>());
     }
 
-    public StatementModel(){}
+    public StatementModel(){ this("", new ArrayList<>());}
 
 }

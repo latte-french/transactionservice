@@ -7,13 +7,11 @@ import model.Transfer;
 import java.util.ArrayList;
 
 public class TransferStatementCreation {
-    private static String statementMessage;
-    private static ArrayList<String> statementObjects;
 
     public static StatementModel putTransferStatement(Transfer transfer, Account accountFrom, Account accountTo)  {
 
-        statementMessage = "INSERT INTO transfers VALUES (null,?,?,?,?,?,?,?)";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "INSERT INTO transfers VALUES (null,?,?,?,?,?,?,?)";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(accountFrom.getId().toString());
         statementObjects.add(transfer.getSumToTransfer().toString());
         statementObjects.add(accountFrom.getCurrency());
@@ -26,7 +24,7 @@ public class TransferStatementCreation {
     }
 
     public static StatementModel getTransfersStatement() {
-        statementMessage = "SELECT * FROM transfers";
+        String statementMessage = "SELECT * FROM transfers";
         return new StatementModel(statementMessage);
     }
 

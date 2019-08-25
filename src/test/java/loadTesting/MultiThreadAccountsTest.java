@@ -6,7 +6,6 @@ import model.Account;
 import model.exceptions.NoSuchAccountException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import service.AccountService;
@@ -32,7 +31,6 @@ public class MultiThreadAccountsTest {
         ModelsInitialization.init();
     }
 
-    @Ignore
     @ThreadCount(THREAD_COUNT)
     @Test
     public void testPostAccountLoad() throws SQLException, NoSuchAccountException {

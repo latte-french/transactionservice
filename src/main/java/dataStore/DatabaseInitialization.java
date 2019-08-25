@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class DatabaseInitialization {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseInitialization.class);
-    private static ArrayList statementModels;
 
     public static void populateDatabase(){
 
@@ -22,7 +21,7 @@ public class DatabaseInitialization {
 
 
     public static void populateUserTable() {
-        statementModels = new ArrayList();
+        ArrayList<StatementModel> statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("INSERT INTO users VALUES (1,'Alex', 'Smith')"));
             statementModels.add(new StatementModel("INSERT INTO users VALUES (2,'Clint', 'Eastwood')"));
@@ -35,7 +34,7 @@ public class DatabaseInitialization {
     }
 
     public static void populateAccountTable(){
-        statementModels = new ArrayList();
+        ArrayList<StatementModel> statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("INSERT INTO accounts VALUES (4000123412341234,23.56, 'RUB')"));
             statementModels.add(new StatementModel("INSERT INTO accounts VALUES (4000123412341235,5.8, 'USD')"));
@@ -48,7 +47,7 @@ public class DatabaseInitialization {
     }
 
     public static void populateUserAccountTable(){
-        statementModels = new ArrayList();
+        ArrayList<StatementModel> statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("INSERT INTO user_accounts VALUES (null,1,4000123412341234)"));
             statementModels.add(new StatementModel("INSERT INTO user_accounts VALUES (null,2,4000123412341235)"));

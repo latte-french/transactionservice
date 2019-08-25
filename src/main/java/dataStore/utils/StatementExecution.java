@@ -15,26 +15,20 @@ import java.util.Iterator;
 
 public class StatementExecution {
 
-    private static PreparedStatement statement;
-    private static String statementMessage;
-    private static ArrayList<String> statementObjects;
-    private static ArrayList<PreparedStatement> statements;
-    private static ResultSet result;
-    private static ConnectionPool connectionPool = new ConnectionPool();
     private static final Logger LOGGER = LoggerFactory.getLogger(StatementExecution.class);
 
     public static ResultSet prepareAndExecuteQuery (StatementModel statementModel) throws SQLException {
-        statement = prepareStatementForExecution(statementModel);
+        PreparedStatement statement = prepareStatementForExecution(statementModel);
         return queryExecution(statement);
     }
 
     public static void prepareAndExecuteStatement (StatementModel statementModel) throws SQLException {
-        statement = prepareStatementForExecution(statementModel);
+        PreparedStatement statement = prepareStatementForExecution(statementModel);
         statementExecution(statement);
     }
 
     public static void prepareAndExecuteStatements (ArrayList<StatementModel> statementModels) throws SQLException {
-        statements = new ArrayList<>();
+        ArrayList<PreparedStatement> statements = new ArrayList<>();
         Iterator<StatementModel> statementModelsIterator = statementModels.iterator();
 
         while (statementModelsIterator.hasNext()) {
@@ -45,9 +39,9 @@ public class StatementExecution {
     }
 
     public static PreparedStatement prepareStatementForExecution (StatementModel statementModel) throws SQLException {
-        statementMessage = statementModel.getStatementMessage();
-        statementObjects = statementModel.getStatementObjects();
-        statement = getConnectionFromPool().prepareStatement(statementMessage);
+        String statementMessage = statementModel.getStatementMessage();
+        ArrayList<String> statementObjects = statementModel.getStatementObjects();
+        PreparedStatement statement = getConnectionFromPool().prepareStatement(statementMessage);
         //connectionPool.printDbStatus();
 
         Iterator<String> statementObjectsIterator = statementObjects.iterator();
@@ -84,7 +78,7 @@ public class StatementExecution {
     }
 
     public static ResultSet queryExecution (PreparedStatement statement) throws SQLException {
-        result = statement.executeQuery();
+        ResultSet result = statement.executeQuery();
         Connection connection = getConnectionFromPool();
         connection.commit();
         closeConnectionInPool(connection);
@@ -94,6 +88,7 @@ public class StatementExecution {
     public static Connection getConnectionFromPool(){
         Connection connection = null;
         try{
+            ConnectionPool connectionPool = new ConnectionPool();
             DataSource dataSource = connectionPool.setUpPool();
             // connectionPool.printDbStatus();
             connection = dataSource.getConnection();

@@ -8,32 +8,29 @@ import java.util.ArrayList;
 
 public class AccountStatementCreation {
 
-    private static String statementMessage;
-    private static ArrayList<String> statementObjects;
-
     public static StatementModel getAccountStatement(BigInteger id) {
-        statementMessage ="SELECT * FROM accounts WHERE id = ?";
-        statementObjects = new ArrayList<>();
+        String statementMessage ="SELECT * FROM accounts WHERE id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
         return new StatementModel(statementMessage, statementObjects);
     }
 
     public static StatementModel getAccountsStatement () {
-        statementMessage = "SELECT * FROM accounts";
+        String statementMessage = "SELECT * FROM accounts";
         return new StatementModel(statementMessage);
     }
 
     public static StatementModel getAccountsOfUserStatement(BigInteger id) {
-        statementMessage = "SELECT * FROM accounts WHERE id IN "+
+        String statementMessage = "SELECT * FROM accounts WHERE id IN "+
                 "(SELECT account_id from user_accounts where user_id = ?)";
-        statementObjects = new ArrayList<>();
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
         return new StatementModel(statementMessage, statementObjects);
     }
 
     public static StatementModel putAccountStatement(Account account) {
-        statementMessage = "INSERT INTO accounts VALUES (?,?,?)";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "INSERT INTO accounts VALUES (?,?,?)";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(account.getId().toString());
         statementObjects.add(account.getBalance().toString());
         statementObjects.add(account.getCurrency());
@@ -42,8 +39,8 @@ public class AccountStatementCreation {
     }
 
     public static StatementModel putUserAccountDependencyStatement(BigInteger accountId, BigInteger userId){
-        statementMessage = "INSERT INTO user_accounts VALUES (null,?,?)";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "INSERT INTO user_accounts VALUES (null,?,?)";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(userId.toString());
         statementObjects.add(accountId.toString());
 
@@ -51,16 +48,16 @@ public class AccountStatementCreation {
     }
 
     public static StatementModel removeAccountStatement (BigInteger id) {
-        statementMessage = "DELETE FROM accounts WHERE id = ?";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "DELETE FROM accounts WHERE id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
 
         return new StatementModel(statementMessage, statementObjects);
     }
 
     public static StatementModel removeUserAccountDependencyStatement(BigInteger id){
-        statementMessage = "DELETE FROM user_accounts WHERE account_id = ?";
-        statementObjects = new ArrayList<>();
+        String statementMessage = "DELETE FROM user_accounts WHERE account_id = ?";
+        ArrayList<String> statementObjects = new ArrayList<>();
         statementObjects.add(id.toString());
 
         return new StatementModel(statementMessage, statementObjects);
@@ -72,7 +69,8 @@ public class AccountStatementCreation {
 
     public static StatementModel updateAccountStatement(Account account, Account accountChanges){
 
-        statementObjects = new ArrayList<>();
+        String statementMessage;
+        ArrayList<String> statementObjects = new ArrayList<>();
 
         if ((accountChanges.getBalance() != null) && (accountChanges.getCurrency() == null)){
             statementMessage = "UPDATE accounts SET balance = ? WHERE id = ?";
