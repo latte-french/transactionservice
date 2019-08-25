@@ -10,16 +10,15 @@ import javax.sql.DataSource;
 
 public class ConnectionPool {
 
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String JDBC_DRIVER = "org.hsqldb.jdbcDriver";
     static final String JDBC_DB_URL = "jdbc:hsqldb:mem:transaction_service";
 
     // JDBC Database Credentials
     static final String JDBC_USER = "admin";
-    static final String JDBC_PASS = "";
+    static final String JDBC_PASS = "admin";
 
     private static GenericObjectPool genericObjectPoolPool = null;
 
-    @SuppressWarnings("unused")
     public DataSource setUpPool() throws Exception {
         Class.forName(JDBC_DRIVER);
 

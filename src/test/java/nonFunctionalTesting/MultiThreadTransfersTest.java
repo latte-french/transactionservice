@@ -1,4 +1,4 @@
-package loadTesting;
+package nonFunctionalTesting;
 
 import com.anarsoft.vmlens.concurrent.junit.ConcurrentTestRunner;
 import com.anarsoft.vmlens.concurrent.junit.ThreadCount;
