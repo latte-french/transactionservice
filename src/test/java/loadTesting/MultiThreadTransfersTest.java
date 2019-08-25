@@ -18,7 +18,9 @@ import service.impl.TransferServiceImpl;
 import utils.CurrencyConverter;
 import utils.DatabaseCleanup;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -31,7 +33,7 @@ public class MultiThreadTransfersTest {
     public static AccountService accountService = new AccountServiceImpl();
     public static TransferService transferService = new TransferServiceImpl(accountService);
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiThreadTransfersTest.class);
-    private final static int THREAD_COUNT2 = 10;
+    private final static int THREAD_COUNT2 = 50;
 
     @Before
     public void resetDatabase() throws SQLException, NoSuchAccountException {
@@ -60,23 +62,29 @@ public class MultiThreadTransfersTest {
 
         transferService.createTransfer(transfer);
 
-        Account accountFrom = accountService.getAccount(new BigInteger("4000123412341234"));
-        System.out.println("accountFrom has " + accountFrom.getBalance());
-        Account accountTo = accountService.getAccount(new BigInteger("4000123412341235"));
-        System.out.println("accountTo has " + accountTo.getBalance());
     }
 
     @After
     public void testAccountsCount() throws SQLException, NoSuchAccountException {
         Account accountFrom = accountService.getAccount(new BigInteger("4000123412341234"));
         Double expectedBalanceFrom = 1000.0 - 5.0 * THREAD_COUNT2;
-        LOGGER.info("AccountFrom has " + accountFrom.getBalance() + " on balance, should be " + expectedBalanceFrom);
-        assertEquals(expectedBalanceFrom, accountFrom.getBalance());
+
+        BigDecimal bdFrom = BigDecimal.valueOf(accountFrom.getBalance());
+        bdFrom = bdFrom.setScale(3, RoundingMode.HALF_UP);
+        Double actualBalanceFrom = bdFrom.doubleValue();
+
+        LOGGER.info("AccountFrom has " + actualBalanceFrom + " on balance, should be " + expectedBalanceFrom);
+        assertEquals(expectedBalanceFrom, actualBalanceFrom);
 
         Account accountTo = accountService.getAccount(new BigInteger("4000123412341235"));
         Double expectedBalanceTo = CurrencyConverter.currencyConverter(5.0,
                 "RUB", "USD") * THREAD_COUNT2;
-        LOGGER.info("AccountTo has " + accountTo.getBalance() + " on balance, should be " + expectedBalanceTo);
-        assertEquals(expectedBalanceTo, accountTo.getBalance());
+
+        BigDecimal bdTo = BigDecimal.valueOf(accountTo.getBalance());
+        bdTo = bdTo.setScale(3, RoundingMode.HALF_UP);
+        Double actualBalanceTo = bdTo.doubleValue();
+
+        LOGGER.info("AccountTo has " + actualBalanceTo + " on balance, should be " + expectedBalanceTo);
+        assertEquals(expectedBalanceTo, actualBalanceTo);
     }
 }
