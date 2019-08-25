@@ -34,6 +34,8 @@ public class MultiThreadTransfersTest {
     public static TransferService transferService = new TransferServiceImpl(accountService);
     private static final Logger LOGGER = LoggerFactory.getLogger(MultiThreadTransfersTest.class);
     private final static int THREAD_COUNT2 = 50;
+    private long startTime;
+    private long finishTime;
 
     @Before
     public void resetDatabase() throws SQLException, NoSuchAccountException {
@@ -49,11 +51,13 @@ public class MultiThreadTransfersTest {
 
         accountService.updateAccount(accountFrom, accountFromChanges);
         accountService.updateAccount(accountTo, accountToChanges);
+
+        startTime = System.nanoTime();
     }
 
     @ThreadCount(THREAD_COUNT2)
     @Test
-    public void testPostAccountLoad() throws SQLException, NoSuchAccountException {
+    public void testPostTransfersLoad() throws SQLException, NoSuchAccountException {
         Transfer transfer = new Transfer();
         transfer.setAccountFromId(new BigInteger("4000123412341234"));
         transfer.setAccountToId(new BigInteger("4000123412341235"));
@@ -65,7 +69,9 @@ public class MultiThreadTransfersTest {
     }
 
     @After
-    public void testAccountsCount() throws SQLException, NoSuchAccountException {
+    public void testAccountsBalanceAfterTransfers() throws SQLException, NoSuchAccountException {
+        finishTime = System.nanoTime();
+
         Account accountFrom = accountService.getAccount(new BigInteger("4000123412341234"));
         Double expectedBalanceFrom = 1000.0 - 5.0 * THREAD_COUNT2;
 
@@ -86,5 +92,11 @@ public class MultiThreadTransfersTest {
 
         LOGGER.info("AccountTo has " + actualBalanceTo + " on balance, should be " + expectedBalanceTo);
         assertEquals(expectedBalanceTo, actualBalanceTo);
+
+        long timeElapsedInMillis = (finishTime - startTime)/1000000;
+
+        LOGGER.info("Execution time in milliseconds: " + timeElapsedInMillis);
+       // assertTrue(timeElapsedInMillis < 500);
+
     }
 }
