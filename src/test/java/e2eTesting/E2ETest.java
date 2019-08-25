@@ -51,7 +51,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void GetAccount() throws HttpClientException {
+    public void testGetAccountE2E() throws HttpClientException {
         Account account = ModelsInitialization.accountForTest;
 
         GetMethod get = testServerE2E.get("/accounts/4000123412341234", false);
@@ -63,7 +63,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void GetAccounts() throws HttpClientException {
+    public void testGetAccountsE2E() throws HttpClientException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
 
         GetMethod get = testServerE2E.get("/accounts", false);
@@ -75,7 +75,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void PostAccount() throws HttpClientException {
+    public void testPostAccountE2E() throws HttpClientException {
         String jsonString = "{'balance':'5','currency':'RUB','userId':'2'}";
         Account account = new Account(new BigInteger("4000123412341237"),5.0,"RUB");
 
@@ -88,7 +88,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeBalanceAndCurrency() throws HttpClientException {
+    public void testPutAccountChangeBalanceAndCurrencyE2E() throws HttpClientException {
         Account account = ModelsInitialization.accountForTest;
         String jsonString = "{'balance':'5','currency':'EUR'}";
 
@@ -104,7 +104,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void DeleteAccount() throws HttpClientException {
+    public void testDeleteAccountE2E() throws HttpClientException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
         accounts.remove(0);
 
@@ -121,7 +121,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void GetUser() throws HttpClientException {
+    public void testGetUserE2E() throws HttpClientException {
         User user = ModelsInitialization.userForTest;
 
         GetMethod get = testServerE2E.get("/users/1", false);
@@ -133,7 +133,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void GetUsers() throws HttpClientException {
+    public void testGetUsersE2E() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
 
         GetMethod get = testServerE2E.get("/users", false);
@@ -145,7 +145,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void GetUserAccounts() throws HttpClientException {
+    public void testGetUserAccountsE2E() throws HttpClientException {
         ArrayList<Account> userAccounts = ModelsInitialization.userAccountsForTest;
 
         GetMethod get = testServerE2E.get("/users/2/accounts", false);
@@ -157,7 +157,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void PostUser() throws HttpClientException {
+    public void testPostUserE2E() throws HttpClientException {
         String jsonString = "{'firstName':'Maria','lastName':'Teresa'}";
         User user = new User(new BigInteger("4"),"Maria","Teresa");
 
@@ -170,7 +170,7 @@ public class E2ETest {
     
     @Test
     /*positive test*/
-    public void PutUserChangeFirstAndLastNames() throws HttpClientException {
+    public void testPutUserChangeFirstAndLastNamesE2E() throws HttpClientException {
         User user = ModelsInitialization.userForTest;
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
@@ -185,7 +185,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void DeleteUser() throws HttpClientException {
+    public void testDeleteUserE2E() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
         users.remove(0);
 
@@ -202,7 +202,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void PostTransfer() throws HttpClientException {
+    public void testPostTransferE2E() throws HttpClientException {
         String jsonString = "{'from':'4000123412341234','to':'4000123412341235','money':'5'}";
 
         PostMethod post = testServerE2E.post("/transfers", jsonString, false);
@@ -234,7 +234,7 @@ public class E2ETest {
 
     @Test
     /*positive test*/
-    public void GetTransfers() throws HttpClientException {
+    public void testGetTransfersE2E() throws HttpClientException {
         ArrayList<Transfer> transfers = ModelsInitialization.transfersForTest;
 
         GetMethod get = testServerE2E.get("/transfers", false);

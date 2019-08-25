@@ -43,9 +43,8 @@ public class TransferStore {
 
         result = StatementExecution.prepareAndExecuteQuery(statementModel);
         while (result.next()){
-                transferCollection.add(EntityConverters.convertFromEntityToTransfer(result));
+            transferCollection.add(EntityConverters.convertFromEntityToTransfer(result));
         }
         return transferCollection;
     }
-
 }

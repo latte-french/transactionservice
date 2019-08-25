@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class AccountStatementCreation {
+
     private static String statementMessage;
     private static ArrayList<String> statementObjects;
 
@@ -71,7 +72,7 @@ public class AccountStatementCreation {
 
     public static StatementModel updateAccountStatement(Account account, Account accountChanges){
 
-       statementObjects = new ArrayList<>();
+        statementObjects = new ArrayList<>();
 
         if ((accountChanges.getBalance() != null) && (accountChanges.getCurrency() == null)){
             statementMessage = "UPDATE accounts SET balance = ? WHERE id = ?";
@@ -90,5 +91,4 @@ public class AccountStatementCreation {
         statementObjects.add(account.getId().toString());
         return new StatementModel(statementMessage, statementObjects);
     }
-
 }

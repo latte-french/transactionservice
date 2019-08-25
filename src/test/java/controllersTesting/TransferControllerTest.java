@@ -45,7 +45,7 @@ public class TransferControllerTest {
     
     @Test
     /*positive test*/
-    public void PostTransfer() throws HttpClientException {
+    public void testPostTransferApi() throws HttpClientException {
         String jsonString = "{'from':'4000123412341234','to':'4000123412341235','money':'5'}";
 
         PostMethod post = testServerTransfers.post("/transfers", jsonString, false);
@@ -57,7 +57,7 @@ public class TransferControllerTest {
 
     @Test
     /*positive test*/
-    public void GetTransfers() throws HttpClientException {
+    public void testGetTransfersApi() throws HttpClientException {
         GetMethod get = testServerTransfers.get("/transfers", false);
         HttpResponse httpResponse = testServerTransfers.execute(get);
 
@@ -67,7 +67,7 @@ public class TransferControllerTest {
     
     @Test
     /*negative test when accountFrom doesn't exist*/
-    public void PostTransferAccountFromNonExist() throws HttpClientException {
+    public void testPostTransferAccountFromNonExistApi() throws HttpClientException {
         String jsonString = "{'from':'1','to':'4000123412341234','money':'5'}";
 
         PostMethod post = testServerTransfers.post("/transfers", jsonString, false);
@@ -77,10 +77,9 @@ public class TransferControllerTest {
         assertEquals("Account with id 1 doesn't exist", new String(httpResponse.body()));
     }
 
-    
     @Test
     /*negative test when accountTo doesn't exist*/
-    public void PostTransferAccountToNonExist() throws HttpClientException {
+    public void testPostTransferAccountToNonExistApi() throws HttpClientException {
         String jsonString = "{'from':'4000123412341234','to':'1','money':'5'}";
 
         PostMethod post = testServerTransfers.post("/transfers", jsonString, false);
@@ -91,10 +90,9 @@ public class TransferControllerTest {
 
     }
 
-    
     @Test
     /*negative test when no accounts in database*/
-    public void PostTransferNoAccountsExist() throws HttpClientException {
+    public void testPostTransferNoAccountsExistApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -107,10 +105,9 @@ public class TransferControllerTest {
         assertEquals("No accounts exist in the database", new String(httpResponse.body()));
     }
 
-    
     @Test
     /*negative test when balance is not enough*/
-    public void PostTransferBalanceNotEnough() throws HttpClientException {
+    public void testPostTransferBalanceNotEnoughApi() throws HttpClientException {
         String jsonString = "{'from':'4000123412341234','to':'4000123412341235','money':'10000'}";
 
         PostMethod post = testServerTransfers.post("/transfers", jsonString, false);

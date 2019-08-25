@@ -29,20 +29,20 @@ public class AccountServiceTest {
 
     @Test
     /*positive test*/
-    public void GetAccount()  throws NoSuchAccountException, SQLException {
+    public void testGetAccountImpl()  throws NoSuchAccountException, SQLException {
         assertEquals(ModelsInitialization.accountForTest,
                 accountService.getAccount(new BigInteger("4000123412341234")));
     }
 
     @Test
     /*positive test*/
-    public void GetAccounts() throws SQLException {
+    public void testGetAccountsImpl() throws SQLException {
         assertEquals(ModelsInitialization.accountsForTest, accountService.getAccounts());
     }
 
     @Test
     /*positive test*/
-    public void PostAccount() throws SQLException, NoSuchAccountException {
+    public void testPostAccountImpl() throws SQLException, NoSuchAccountException {
         Account account = new Account(new BigInteger("4000123412341237"),5.0,"RUB");
 
         accountService.createAccount(account,new BigInteger("2"));
@@ -52,7 +52,7 @@ public class AccountServiceTest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeBalance() throws SQLException, NoSuchAccountException {
+    public void testPutAccountChangeBalanceImpl() throws SQLException, NoSuchAccountException {
         Account account = ModelsInitialization.accountForTest;
         Account accountChanges = new Account();
         accountChanges.setBalance(5.0);
@@ -65,7 +65,7 @@ public class AccountServiceTest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeCurrency() throws SQLException, NoSuchAccountException  {
+    public void testPutAccountChangeCurrencyImpl() throws SQLException, NoSuchAccountException  {
         Account account = ModelsInitialization.accountForTest;
         Account accountChanges = new Account();
         accountChanges.setCurrency("EUR");
@@ -78,7 +78,7 @@ public class AccountServiceTest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeBalanceAndCurrency() throws SQLException, NoSuchAccountException  {
+    public void testPutAccountChangeBalanceAndCurrencyImpl() throws SQLException, NoSuchAccountException  {
         Account account = ModelsInitialization.accountForTest;
         Account accountChanges = new Account();
         accountChanges.setBalance(5.0);
@@ -93,7 +93,7 @@ public class AccountServiceTest {
 
     @Test
     /*positive test*/
-    public void DeleteAccount() throws SQLException, NoSuchAccountException {
+    public void testDeleteAccountImpl() throws SQLException, NoSuchAccountException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
         accounts.remove(0);
 
@@ -104,13 +104,13 @@ public class AccountServiceTest {
 
     @Test(expected = NoSuchAccountException.class)
     /*negative test on non-existing account*/
-    public void GetNonExistingAccount() throws SQLException, NoSuchAccountException {
+    public void testGetNonExistingAccountImpl() throws SQLException, NoSuchAccountException {
         accountService.getAccount(new BigInteger("1"));
     }
 
     @Test(expected = NoAccountsExistException.class)
     /*negative test on empty database*/
-    public void GetAccountEmptyDatabase() throws SQLException, NoAccountsExistException, NoSuchAccountException {
+    public void testGetAccountEmptyDatabaseImpl() throws SQLException, NoAccountsExistException, NoSuchAccountException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -119,7 +119,7 @@ public class AccountServiceTest {
 
     @Test(expected = NoAccountsExistException.class)
     /*negative test on empty accounts table*/
-    public void GetAccountsEmpty() throws SQLException, NoAccountsExistException {
+    public void testGetAccountsEmptyImpl() throws SQLException, NoAccountsExistException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -128,7 +128,7 @@ public class AccountServiceTest {
 
     @Test(expected = NoSuchAccountException.class)
     /*negative test on non-existing account*/
-    public void PutNonExistingAccount() throws SQLException,NoSuchAccountException {
+    public void testPutNonExistingAccountImpl() throws SQLException,NoSuchAccountException {
         Account account = ModelsInitialization.accountForTest;
         account.setId(new BigInteger("1"));
         Account accountChanges = new Account();
@@ -139,7 +139,7 @@ public class AccountServiceTest {
 
     @Test(expected = NoAccountsExistException.class)
     /*negative test on empty database*/
-    public void PutAccountEmptyDatabase() throws SQLException,NoSuchAccountException, NoAccountsExistException {
+    public void testPutAccountEmptyDatabaseImpl() throws SQLException,NoSuchAccountException, NoAccountsExistException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -152,13 +152,13 @@ public class AccountServiceTest {
 
     @Test(expected = NoSuchAccountException.class)
     /*negative test on non-existing account*/
-    public void DeleteNonExistingAccount() throws SQLException,NoSuchAccountException {
+    public void testDeleteNonExistingAccountImpl() throws SQLException,NoSuchAccountException {
         accountService.removeAccount(new BigInteger("1"));
     }
 
     @Test(expected = NoAccountsExistException.class)
     /*negative test on empty database*/
-    public void DeleteAccountEmpty() throws SQLException,NoSuchAccountException, NoAccountsExistException {
+    public void testDeleteAccountEmptyImpl() throws SQLException,NoSuchAccountException, NoAccountsExistException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 

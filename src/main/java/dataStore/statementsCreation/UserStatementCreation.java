@@ -80,6 +80,5 @@ public class UserStatementCreation {
 
         statementObjects.add(user.getId().toString());
         return new StatementModel(statementMessage, statementObjects);
-
     }
 }

@@ -41,7 +41,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void GetUser() throws HttpClientException {
+    public void testGetUserApi() throws HttpClientException {
         GetMethod get = testServerUsers.get("/users/1", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
@@ -50,7 +50,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void GetUsers() throws HttpClientException {
+    public void testGetUsersApi() throws HttpClientException {
         GetMethod get = testServerUsers.get("/users", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
@@ -60,7 +60,7 @@ public class UserControllerTest {
     
     @Test
     /*positive test*/
-    public void GetUserAccounts() throws HttpClientException {
+    public void testGetUserAccountsApi() throws HttpClientException {
         GetMethod get = testServerUsers.get("/users/2/accounts", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
 
@@ -69,7 +69,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void PostUser() throws HttpClientException {
+    public void testPostUserApi() throws HttpClientException {
         String jsonString = "{'firstName':'Maria','lastName':'Teresa'}";
 
         PostMethod post = testServerUsers.post("/users", jsonString, false);
@@ -80,7 +80,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void PutUserChangeFirstName() throws HttpClientException {
+    public void testPutUserChangeFirstNameApi() throws HttpClientException {
         String jsonString = "{'firstName':'Angela'}";
 
         PutMethod put = testServerUsers.put("/users/1", jsonString, false);
@@ -91,7 +91,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void PutUserChangeLastName() throws HttpClientException {
+    public void testPutUserChangeLastNameApi() throws HttpClientException {
         String jsonString = "{'lastName':'Wolf'}";
 
         PutMethod put = testServerUsers.put("/users/1", jsonString, false);
@@ -102,7 +102,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void PutUserChangeFirstAndLastNames() throws HttpClientException {
+    public void testPutUserChangeFirstAndLastNamesApi() throws HttpClientException {
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
         PutMethod put = testServerUsers.put("/users/1", jsonString, false);
@@ -113,7 +113,7 @@ public class UserControllerTest {
 
     @Test
     /*positive test*/
-    public void DeleteUser() throws HttpClientException {
+    public void testDeleteUserApi() throws HttpClientException {
         DeleteMethod delete = testServerUsers.delete("/users/1", false);
         HttpResponse httpResponse = testServerUsers.execute(delete);
 
@@ -123,7 +123,7 @@ public class UserControllerTest {
     
     @Test
     /*negative test on non-existing user*/
-    public void GetNonExistingUser() throws HttpClientException {
+    public void testGetNonExistingUserApi() throws HttpClientException {
 
         GetMethod get = testServerUsers.get("/users/7", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
@@ -133,9 +133,9 @@ public class UserControllerTest {
     }
 
     
-     @Test
+    @Test
     /*negative test on non-existing user*/
-    public void GetUserEmptyDatabase() throws HttpClientException {
+    public void testGetUserEmptyDatabaseApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -149,7 +149,7 @@ public class UserControllerTest {
     
     @Test
     /*negative test on empty database*/
-    public void GetUsersEmptyDatabase() throws HttpClientException {
+    public void testGetUsersEmptyDatabaseApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -163,7 +163,7 @@ public class UserControllerTest {
     
     @Test
     /*negative test on non-existing user*/
-    public void GetAccountsNonExistingUser() throws HttpClientException {
+    public void testGetAccountsNonExistingUserApi() throws HttpClientException {
 
         GetMethod get = testServerUsers.get("/users/7/accounts", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
@@ -175,7 +175,7 @@ public class UserControllerTest {
     
     @Test
     /*negative test on empty database*/
-    public void GetUserAccountsEmptyDatabase() throws HttpClientException {
+    public void testGetUserAccountsEmptyDatabaseApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -189,7 +189,7 @@ public class UserControllerTest {
     
     @Test
     /*negative test when no accounts exist for this user*/
-    public void GetNoAccountsBelongToUser() throws HttpClientException {
+    public void testGetNoAccountsBelongToUserApi() throws HttpClientException {
 
         GetMethod get = testServerUsers.get("/users/3/accounts", false);
         HttpResponse httpResponse = testServerUsers.execute(get);
@@ -198,10 +198,9 @@ public class UserControllerTest {
         assertEquals("No accounts belong to the user with id = 3", new String(httpResponse.body()));
     }
 
-    
     @Test
     /*negative test on non-existing user*/
-    public void PutNonExistingUser() throws HttpClientException {
+    public void testPutNonExistingUserApi() throws HttpClientException {
         String jsonString = "{'firstName':'Angela','lastName':'Wolf'}";
 
         PutMethod put = testServerUsers.put("/users/4", jsonString, false);
@@ -211,10 +210,9 @@ public class UserControllerTest {
         assertEquals("User with id 4 doesn't exist", new String(httpResponse.body()));
     }
 
-    
     @Test
     /*negative test on empty database*/
-    public void PutUserEmptyDatabase() throws HttpClientException {
+    public void testPutUserEmptyDatabaseApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -227,10 +225,9 @@ public class UserControllerTest {
         assertEquals("No users exist in the database", new String(httpResponse.body()));
     }
 
-    
     @Test
     /*negative test on non-existing user*/
-    public void DeleteNonExistingUser() throws HttpClientException {
+    public void testDeleteNonExistingUserApi() throws HttpClientException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
         users.remove(0);
 
@@ -244,7 +241,7 @@ public class UserControllerTest {
     
     @Test
     /*negative test on empty database*/
-    public void DeleteUserEmpty() throws HttpClientException {
+    public void testDeleteUserEmptyApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 

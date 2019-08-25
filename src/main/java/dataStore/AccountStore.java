@@ -3,11 +3,12 @@ package dataStore;
 import dataStore.statementsCreation.AccountStatementCreation;
 import dataStore.utils.EntityConverters;
 import dataStore.utils.StatementExecution;
-import model.StatementModel;
 import model.Account;
+import model.StatementModel;
 
 import java.math.BigInteger;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class AccountStore {
 
         result = StatementExecution.prepareAndExecuteQuery(statementModel);
         while (result.next()){
-                 accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
+            accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
         }
         return accountCollection;
     }
@@ -44,7 +45,7 @@ public class AccountStore {
 
         result = StatementExecution.prepareAndExecuteQuery(statementModel);
         while (result.next()){
-                accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
+            accountCollection.add(EntityConverters.convertFromEntityToAccount(result));
         }
         return accountCollection;
     }

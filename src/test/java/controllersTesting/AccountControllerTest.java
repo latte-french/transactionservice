@@ -41,7 +41,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void GetAccount() throws HttpClientException {
+    public void testGetAccountApi() throws HttpClientException {
         GetMethod get = testServerAccounts.get("/accounts/4000123412341234", false);
         HttpResponse httpResponse = testServerAccounts.execute(get);
 
@@ -50,7 +50,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void GetAccounts() throws HttpClientException {
+    public void testGetAccountsApi() throws HttpClientException {
         GetMethod get = testServerAccounts.get("/accounts", false);
         HttpResponse httpResponse = testServerAccounts.execute(get);
 
@@ -59,7 +59,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void PostAccount() throws HttpClientException {
+    public void testPostAccountApi() throws HttpClientException {
         String jsonString = "{'balance':'5','currency':'RUB','userId':'2'}";
 
         PostMethod post = testServerAccounts.post("/accounts", jsonString, false);
@@ -70,7 +70,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeBalance() throws HttpClientException {
+    public void testPutAccountChangeBalanceApi() throws HttpClientException {
         String jsonString = "{'balance':'5'}";
 
         PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
@@ -81,7 +81,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeCurrency() throws HttpClientException {
+    public void testPutAccountChangeCurrencyApi() throws HttpClientException {
         String jsonString = "{'currency':'EUR'}";
 
         PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
@@ -92,7 +92,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void PutAccountChangeBalanceAndCurrency() throws HttpClientException {
+    public void testPutAccountChangeBalanceAndCurrencyApi() throws HttpClientException {
         String jsonString = "{'balance':'5','currency':'EUR'}";
 
         PutMethod put = testServerAccounts.put("/accounts/4000123412341234", jsonString, false);
@@ -103,7 +103,7 @@ public class AccountControllerTest {
 
     @Test
     /*positive test*/
-    public void DeleteAccount() throws HttpClientException {
+    public void testDeleteAccountApi() throws HttpClientException {
         DeleteMethod delete = testServerAccounts.delete("/accounts/4000123412341234", false);
         HttpResponse httpResponse = testServerAccounts.execute(delete);
 
@@ -112,7 +112,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on non-existing account*/
-    public void GetNonExistingAccount() throws HttpClientException {
+    public void testGetNonExistingAccountApi() throws HttpClientException {
         GetMethod get = testServerAccounts.get("/accounts/1", false);
         HttpResponse httpResponse = testServerAccounts.execute(get);
 
@@ -122,7 +122,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on empty database*/
-    public void GetAccountEmptyDatabase() throws HttpClientException {
+    public void testGetAccountEmptyDatabaseApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -135,7 +135,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on empty accounts table*/
-    public void GetAccountsEmpty() throws HttpClientException {
+    public void testGetAccountsEmptyApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -148,7 +148,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on non-existing account*/
-    public void PutNonExistingAccount() throws HttpClientException {
+    public void testPutNonExistingAccountApi() throws HttpClientException {
         String jsonString = "{'currency':'EUR'}";
 
         PutMethod put = testServerAccounts.put("/accounts/1", jsonString, false);
@@ -160,7 +160,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on empty database*/
-    public void PutAccountEmptyDatabase() throws HttpClientException {
+    public void testPutAccountEmptyDatabaseApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
         String jsonString = "{'currency':'EUR'}";
@@ -174,7 +174,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on non-existing account*/
-    public void DeleteNonExistingAccount() throws HttpClientException {
+    public void testDeleteNonExistingAccountApi() throws HttpClientException {
         ArrayList<Account> accounts = ModelsInitialization.accountsForTest;
         accounts.remove(0);
 
@@ -187,7 +187,7 @@ public class AccountControllerTest {
 
     @Test
     /*negative test on empty database*/
-    public void DeleteAccountEmpty() throws HttpClientException {
+    public void testDeleteAccountEmptyApi() throws HttpClientException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 

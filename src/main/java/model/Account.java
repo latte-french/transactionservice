@@ -16,7 +16,7 @@ import java.math.BigInteger;
     private String currency;
     public static volatile BigInteger counter = new BigInteger("4000123412341236");
 
-    public static void increaseCounter(){
+    public static synchronized void increaseCounter(){
         counter = counter.add(BigInteger.ONE);
     }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DatabaseInitializationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseInitializationTest.class);
-    private static ArrayList<StatementModel> statementModels;
+    private static ArrayList statementModels;
 
     public static void populateDatabase(){
 
@@ -23,7 +23,7 @@ public class DatabaseInitializationTest {
 
 
     public static void populateUserTable() {
-        statementModels = new ArrayList<>();
+        statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("INSERT INTO users VALUES (1,'Alex', 'Smith')"));
             statementModels.add(new StatementModel("INSERT INTO users VALUES (2,'Clint', 'Eastwood')"));
@@ -36,7 +36,7 @@ public class DatabaseInitializationTest {
     }
 
     public static void populateAccountTable(){
-        statementModels = new ArrayList<>();
+        statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("INSERT INTO accounts VALUES (4000123412341234,23.56, 'RUB')"));
             statementModels.add(new StatementModel("INSERT INTO accounts VALUES (4000123412341235,5.8, 'USD')"));
@@ -49,7 +49,7 @@ public class DatabaseInitializationTest {
     }
 
     public static void populateUserAccountTable(){
-        statementModels = new ArrayList<>();
+        statementModels = new ArrayList();
         try {
             statementModels.add(new StatementModel("INSERT INTO user_accounts VALUES (null,1,4000123412341234)"));
             statementModels.add(new StatementModel("INSERT INTO user_accounts VALUES (null,2,4000123412341235)"));
@@ -62,7 +62,7 @@ public class DatabaseInitializationTest {
     }
 
     public static void populateTransfersTable(){
-        statementModels = new ArrayList<>();
+        statementModels = new ArrayList();
         try{
             statementModels.add(new StatementModel("INSERT INTO transfers VALUES (null," +
                     " 4000123412341234, 3.0, 'RUB', 4000123412341235, 6.7, 'EUR'," +

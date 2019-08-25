@@ -16,7 +16,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-    public static void increaseCounter(){
+    public static synchronized void increaseCounter(){
         counter = counter.add(BigInteger.ONE);
     }
 }

@@ -30,26 +30,26 @@ public class UserServiceTest {
 
     @Test
     /*positive test*/
-    public void GetUser() throws SQLException, NoSuchUserException {
+    public void testGetUserImpl() throws SQLException, NoSuchUserException {
         assertEquals(ModelsInitialization.userForTest, userService.getUser(new BigInteger("1")));
     }
 
     @Test
     /*positive test*/
-    public void GetUsers() throws SQLException {
+    public void testGetUsersImpl() throws SQLException {
         assertEquals(ModelsInitialization.usersForTest, userService.getUsers());
     }
 
     @Test
     /*positive test*/
-    public void GetUserAccounts() throws SQLException{
+    public void testGetUserAccountsImpl() throws SQLException{
         assertEquals(ModelsInitialization.userAccountsForTest, 
                 userService.getAccountsOfUser(new BigInteger("2")));
     }
 
     @Test
     /*positive test*/
-    public void PostUser() throws SQLException {
+    public void testPostUserImpl() throws SQLException {
         User user = new User(new BigInteger("4"),"Maria","Teresa");
 
         userService.createUser(user);
@@ -59,7 +59,7 @@ public class UserServiceTest {
 
     @Test
     /*positive test*/
-    public void PutUserChangeFirstName() throws SQLException {
+    public void testPutUserChangeFirstNameImpl() throws SQLException {
         User user = ModelsInitialization.userForTest;
         User userChanges = new User();
         userChanges.setFirstName("Angela");
@@ -72,7 +72,7 @@ public class UserServiceTest {
 
     @Test
     /*positive test*/
-    public void PutUserChangeLastName() throws SQLException {
+    public void testPutUserChangeLastNameImpl() throws SQLException {
         User user = ModelsInitialization.userForTest;
         User userChanges = new User();
         userChanges.setLastName("Wolf");
@@ -85,7 +85,7 @@ public class UserServiceTest {
 
     @Test
     /*positive test*/
-    public void PutUserChangeFirstAndLastNames() throws SQLException {
+    public void testPutUserChangeFirstAndLastNamesImpl() throws SQLException {
         User user = ModelsInitialization.userForTest;
         User userChanges = new User();
         userChanges.setFirstName("Angela");
@@ -100,7 +100,7 @@ public class UserServiceTest {
 
     @Test
     /*positive test*/
-    public void DeleteUser() throws SQLException {
+    public void testDeleteUserImpl() throws SQLException {
         ArrayList<User> users = ModelsInitialization.usersForTest;
         users.remove(0);
 
@@ -112,14 +112,14 @@ public class UserServiceTest {
 
     @Test(expected = NoSuchUserException.class)
     /*negative test on non-existing user*/
-    public void GetNonExistingUser() throws SQLException {
+    public void testGetNonExistingUserImpl() throws SQLException {
         User user = userService.getUser(new BigInteger("4"));
     }
 
 
-     @Test(expected = NoUsersExistException.class)
+    @Test(expected = NoUsersExistException.class)
     /*negative test on non-existing user*/
-    public void GetUserEmptyDatabase() throws SQLException {
+    public void testGetUserEmptyDatabaseImpl() throws SQLException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -129,7 +129,7 @@ public class UserServiceTest {
 
     @Test(expected = NoUsersExistException.class)
     /*negative test on empty database*/
-    public void GetUsersEmptyDatabase() throws SQLException {
+    public void testGetUsersEmptyDatabaseImpl() throws SQLException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -138,13 +138,13 @@ public class UserServiceTest {
 
     @Test(expected = NoSuchUserException.class)
     /*negative test on non-existing user*/
-    public void GetAccountsNonExistingUser() throws SQLException {
+    public void testGetAccountsNonExistingUserImpl() throws SQLException {
         userService.getAccountsOfUser(new BigInteger("4"));
     }
 
     @Test(expected = NoUsersExistException.class)
     /*negative test on empty database*/
-    public void GetUserAccountsEmptyDatabase() throws SQLException {
+    public void testGetUserAccountsEmptyDatabaseImpl() throws SQLException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -153,14 +153,14 @@ public class UserServiceTest {
 
     @Test(expected = NoUserAccountsException.class)
     /*negative test when no accounts exist for this user*/
-    public void GetNoAccountsBelongToUser() throws SQLException {
+    public void testGetNoAccountsBelongToUserImpl() throws SQLException {
 
         userService.getAccountsOfUser(new BigInteger("3"));
     }
 
     @Test(expected = NoSuchUserException.class)
     /*negative test on non-existing user*/
-    public void PutNonExistingUser() throws SQLException {
+    public void testPutNonExistingUserImpl() throws SQLException {
 
         User user = ModelsInitialization.userForTest;
         user.setId(new BigInteger("4"));
@@ -173,7 +173,7 @@ public class UserServiceTest {
 
     @Test(expected = NoUsersExistException.class)
     /*negative test on empty database*/
-    public void PutUserEmptyDatabase() throws SQLException {
+    public void testPutUserEmptyDatabaseImpl() throws SQLException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -187,13 +187,13 @@ public class UserServiceTest {
 
     @Test(expected = NoSuchUserException.class)
     /*negative test on non-existing user*/
-    public void DeleteNonExistingUser() throws SQLException {
+    public void testDeleteNonExistingUserImpl() throws SQLException {
         userService.removeUser(new BigInteger("4"));
     }
 
     @Test(expected = NoUsersExistException.class)
     /*negative test on empty database*/
-    public void DeleteUserEmpty() throws SQLException {
+    public void testDeleteUserEmptyImpl() throws SQLException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 

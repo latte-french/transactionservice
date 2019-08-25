@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -21,8 +24,8 @@ public class StatementExecution {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatementExecution.class);
 
     public static ResultSet prepareAndExecuteQuery (StatementModel statementModel) throws SQLException {
-       statement = prepareStatementForExecution(statementModel);
-       return queryExecution(statement);
+        statement = prepareStatementForExecution(statementModel);
+        return queryExecution(statement);
     }
 
     public static void prepareAndExecuteStatement (StatementModel statementModel) throws SQLException {
@@ -66,15 +69,15 @@ public class StatementExecution {
     }
 
     public static void statementsExecution (ArrayList<PreparedStatement> statements) throws SQLException {
-       try {
-           Iterator<PreparedStatement> PreparedStatementIterator = statements.iterator();
-           while (PreparedStatementIterator.hasNext()) {
-               PreparedStatementIterator.next().executeUpdate();
-           }
-       } catch (SQLException e) {
-           getConnectionFromPool().rollback ();
-           throw new SQLException(e);
-       }
+        try {
+            Iterator<PreparedStatement> PreparedStatementIterator = statements.iterator();
+            while (PreparedStatementIterator.hasNext()) {
+                PreparedStatementIterator.next().executeUpdate();
+            }
+        } catch (SQLException e) {
+            getConnectionFromPool().rollback ();
+            throw new SQLException(e);
+        }
         Connection connection = getConnectionFromPool();
         connection.commit();
         closeConnectionInPool(connection);
@@ -92,9 +95,9 @@ public class StatementExecution {
         Connection connection = null;
         try{
             DataSource dataSource = connectionPool.setUpPool();
-           // connectionPool.printDbStatus();
+            // connectionPool.printDbStatus();
             connection = dataSource.getConnection();
-           // connectionPool.printDbStatus();
+            // connectionPool.printDbStatus();
         } catch(Exception sqlException) {
             sqlException.printStackTrace();
         }
@@ -109,6 +112,6 @@ public class StatementExecution {
         } catch(Exception sqlException) {
             sqlException.printStackTrace();
         }
-       // connectionPool.printDbStatus();
+        // connectionPool.printDbStatus();
     }
 }

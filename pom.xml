@@ -56,7 +56,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M3</version>
                 <configuration>
-                    <forkCount>6</forkCount>
+                    <forkCount>10</forkCount>
                     <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
@@ -117,7 +117,12 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.vmlens</groupId>
+            <artifactId>concurrent-junit</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

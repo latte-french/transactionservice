@@ -35,7 +35,7 @@ public class TransferServiceTest {
 
     @Test
     /*positive test*/
-    public void PostTransfer() throws SQLException, NoSuchAccountException {
+    public void testPostTransferImpl() throws SQLException, NoSuchAccountException {
         Transfer transfer = new Transfer();
         transfer.setAccountFromId(new BigInteger("4000123412341234"));
         transfer.setAccountToId(new BigInteger("4000123412341235"));
@@ -65,14 +65,14 @@ public class TransferServiceTest {
 
     @Test
     /*positive test*/
-    public void GetTransfers() throws SQLException {
+    public void testGetTransfersImpl() throws SQLException {
         assertEquals(ModelsInitialization.transfersForTest, transferService.getTransfers());
     }
 
 
     @Test(expected = NoSuchAccountException.class)
     /*negative test when accountFrom doesn't exist*/
-    public void PostTransferAccountFromNonExist() throws SQLException, NoSuchAccountException {
+    public void testPostTransferAccountFromNonExistImpl() throws SQLException, NoSuchAccountException {
         Transfer transfer = new Transfer();
         transfer.setAccountFromId(new BigInteger("1"));
         transfer.setAccountToId(new BigInteger("4000123412341234"));
@@ -90,7 +90,7 @@ public class TransferServiceTest {
 
     @Test(expected = NoSuchAccountException.class)
     /*negative test when accountTo doesn't exist*/
-    public void PostTransferAccountToNonExist() throws SQLException, NoSuchAccountException {
+    public void testPostTransferAccountToNonExistImpl() throws SQLException, NoSuchAccountException {
         Transfer transfer = new Transfer();
         transfer.setAccountFromId(new BigInteger("4000123412341234"));
         transfer.setAccountToId(new BigInteger("1"));
@@ -109,7 +109,7 @@ public class TransferServiceTest {
 
     @Test(expected = NoAccountsExistException.class)
     /*negative test when no accounts in database*/
-    public void PostTransferNoAccountsExist() throws SQLException, NoSuchAccountException {
+    public void testPostTransferNoAccountsExistImpl() throws SQLException, NoSuchAccountException {
         DatabaseCleanup.cleanDatabase();
         DatabaseCreation.initDatabase();
 
@@ -127,7 +127,7 @@ public class TransferServiceTest {
 
     @Test(expected = BalanceNotEnoughException.class)
     /*negative test when balance is not enough*/
-    public void PostTransferBalanceNotEnough() throws SQLException, NoSuchAccountException {
+    public void testPostTransferBalanceNotEnoughImpl() throws SQLException, NoSuchAccountException {
         Transfer transfer = new Transfer();
         transfer.setAccountFromId(new BigInteger("4000123412341234"));
         transfer.setAccountToId(new BigInteger("4000123412341235"));
